@@ -8,7 +8,6 @@ import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 
 
-
 const IOSSwitch = withStyles(theme => ({
     root: {
       width: 42,
@@ -89,14 +88,14 @@ export default class Home extends Component {
                             </Typography>
                         </Grid>
                         <Grid item lg={8} sm={10} container direction="row" justify="space-evenly" >
-                            <Bigbutton text="Cashier" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fcashier%20(1).svg?alt=media&token=b1a52dee-1c7e-4a47-9e30-d50aa27f308d" />
-                            <Bigbutton text="Order" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fmenu.svg?alt=media&token=73832d6e-0000-4d25-9f8d-e8599e86e021" />
-                            <Bigbutton text="History" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fhistory.svg?alt=media&token=52479cd4-fb36-4097-8742-d9c3587f16c7" />
+                            <Bigbutton to="/member" onclick="activateLasers()" text="Cashier" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fcashier%20(1).svg?alt=media&token=b1a52dee-1c7e-4a47-9e30-d50aa27f308d" />
+                            <Bigbutton to="/member" text="Order" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fmenu.svg?alt=media&token=73832d6e-0000-4d25-9f8d-e8599e86e021" />
+                            <Bigbutton to="/member" text="History" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fhistory.svg?alt=media&token=52479cd4-fb36-4097-8742-d9c3587f16c7" />
                         </Grid>
                         <Grid item lg={8} sm={10} container direction="row" justify="space-evenly">
-                            <Bigbutton text="Menu" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Frestaurant.svg?alt=media&token=6b8541b9-fbeb-4c3e-8857-ec8996beee20" />
-                            <Bigbutton text="Member" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fid-card.svg?alt=media&token=78ea1153-848c-413e-95bc-a038028bdbe3" />
-                            <Bigbutton text="Staff" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fconsultation.svg?alt=media&token=0f515610-61a4-4a62-b3a3-4b35c5ed3c47" />
+                            <Bigbutton to="/member" text="Menu" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Frestaurant.svg?alt=media&token=6b8541b9-fbeb-4c3e-8857-ec8996beee20" />
+                            <Bigbutton to="/member" text="Member" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fid-card.svg?alt=media&token=78ea1153-848c-413e-95bc-a038028bdbe3" />
+                            <Bigbutton to="/member" text="Staff" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fconsultation.svg?alt=media&token=0f515610-61a4-4a62-b3a3-4b35c5ed3c47" />
                         </Grid>
                     </Grid>
                 </Container>

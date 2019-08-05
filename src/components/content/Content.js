@@ -4,12 +4,13 @@ import { Container } from 'reactstrap';
 import NavBar from './Navbar';
 import { Switch, Route } from 'react-router-dom';
 import Order from '../../pages/Order';
+import { Redirect } from 'react-router-dom'
 
 export default props => (
     <Container fluid className={classNames('content', {'is-open': props.isOpen})}>
       <NavBar toggle={props.toggle}/>
       <Switch>
-        <Route exact path="/" component={() => "Hello" } />
+        <Route exact path="/"  render={() => <Redirect to="/home" />}/>
         <Route exact path="/Order" component={Order} />
         <Route exact path="/Pages" component={() => "Pages" } />
         <Route exact path="/faq" component={() => "FAQ" } />

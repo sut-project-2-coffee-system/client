@@ -11,9 +11,9 @@ export default props => {
         <FontAwesomeIcon icon={faAlignLeft}/>
       </Button>
       {/* <NavbarToggler onClick={toggle} /> */}
-      <diV className="ml-auto" sm>
+      <div className="ml-auto" >
               <Button outline color="danger" >Login</Button>{' '}
-      </diV>
+      </div>
     </Navbar>
   );
 }

@@ -15,7 +15,11 @@ const SideBar = props => (
       </div>
       <div className="side-menu">
         <Nav vertical className="list-unstyled pb-3">
-          <SubMenu title="Home" icon={faHome} items={submenus[0]}/>
+        <NavItem>
+            <NavLink tag={Link} to={'/Home'}>
+              <FontAwesomeIcon icon={faHome} className="mr-2"/>Home
+            </NavLink>
+          </NavItem>
           <NavItem>
             <NavLink tag={Link} to={'/order'}>
             <FastfootIcon />Order

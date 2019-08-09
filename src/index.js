@@ -6,6 +6,11 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Route,Switch } from 'react-router-dom'
 import  Home  from './pages/Home'
+import { createStore } from 'redux'
+import reducers from './reducers'
+import {Provider} from 'react-redux'
+
+const store = createStore(reducers)
 
 const HomeContainer = () => (
     <div className="container">
@@ -15,12 +20,15 @@ const HomeContainer = () => (
 )
 
 ReactDOM.render(
-    <Router >
-        <Switch>
-                <Route path="/home" component={HomeContainer} />
-                <Route component={App} />
-        </Switch>
-    </Router>
+    <Provider store={store}>
+        <Router >
+            <Switch>
+                    <Route path="/home" component={HomeContainer} />
+                    <Route component={App} />
+            </Switch>
+        </Router>
+    </Provider>
+
     , document.getElementById('root'));
 
 

@@ -6,11 +6,12 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Route,Switch } from 'react-router-dom'
 import  Home  from './pages/Home'
-import { createStore } from 'redux'
+import { createStore,applyMiddleware } from 'redux'
 import reducers from './reducers'
 import {Provider} from 'react-redux'
+import thunk from 'redux-thunk'
 
-const store = createStore(reducers)
+const store = createStore(reducers,applyMiddleware(thunk))
 
 const HomeContainer = () => (
     <div className="container">

@@ -11,8 +11,29 @@ function changetabValue(state = 1,action){
     }
 }
 
+
+function orderSelect(state = 0, action) {
+    switch (action.type) {
+        case 'orderSelect':
+            return action.payload
+        default:
+                return state
+    }
+}
+
+function orders(state = [], action){
+    switch (action.type){
+        case 'loadOrder':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 const reducers = combineReducers({
     tabValue: changetabValue,
+    orders: orders,
+    orderSelect: orderSelect
 })
 
 export default reducers

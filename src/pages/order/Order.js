@@ -27,6 +27,9 @@ const styles = {
         overflow: 'auto',
         maxHeight: 550,
         height: 550
+    },
+    slectedItemStyle:{
+        backgroundColor: 'red'
     }
 }
 
@@ -48,13 +51,9 @@ class Order extends Component {
         this.props.dispatch(loadOrder())
     }
 
-    // orderSelect = (item) => {
-    //     console.log('Parent : ',item)
-        
-    // }
-
     render() {
         let { classes, orders, dispatch,orderSelect } = this.props;
+
         return (
             <Fragment>
                 <div className={classes.root}>
@@ -62,7 +61,7 @@ class Order extends Component {
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={orders} onSelectOrder={(item) => dispatch({type: 'orderSelect',payload: item.no})}></OrderList>
+                                    <OrderList orders={orders}  orderSelect={orderSelect} onSelectOrder={(item) => dispatch({type: 'orderSelect',payload: item.no})}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>

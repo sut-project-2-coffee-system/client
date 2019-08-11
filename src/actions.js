@@ -27,3 +27,30 @@ export const loadOrder = () => {
         })
     }
 }
+
+
+export const loadMenuSelect = (orderselect) =>{
+    return (dispatch) => {
+        let menuTemp = []
+        orderselect.orderList.map(item => {
+            firebase.database().ref(`menu/${item.key}`).on('value', function (snapshot) {
+                menuTemp.push(createRow(snapshot.val().name, item.amount, snapshot.val().price))
+            });
+            return ''
+        })
+        dispatch({
+            type: 'menuInOrder',
+            payload: menuTemp
+        })
+    }
+}
+
+
+function priceRow(qty, unit) {
+    return qty * unit;
+}
+
+function createRow(desc, qty, unit) {
+    const price = priceRow(qty, unit);
+    return { desc, qty, unit, price };
+}

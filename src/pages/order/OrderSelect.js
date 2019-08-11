@@ -30,15 +30,29 @@ function subtotal(items) {
     return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
 }
 
-const rows = [
+ let rows = [
     createRow('Paperclips (Box)', 100, 1.15),
     createRow('Paper (Case)', 10, 45.99),
     createRow('Waste Basket', 2, 17.99),
-];
+]; 
 
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+let invoiceSubtotal = subtotal(rows);
+let invoiceTaxes = TAX_RATE * invoiceSubtotal;
+let invoiceTotal = invoiceTaxes + invoiceSubtotal;
+
+function setRow(data) {
+    rows = []
+    data.forEach(cur => {
+        rows.push(
+            createRow(cur["desc"], cur["qty"], cur["price"])
+        )
+    });
+
+    invoiceSubtotal = subtotal(rows);
+    invoiceTaxes = TAX_RATE * invoiceSubtotal;
+    invoiceTotal = invoiceTaxes + invoiceSubtotal;
+    
+}
 
 const styles = {
     root: {
@@ -56,16 +70,22 @@ class OrderSelect extends Component {
         
     }
 
+    componentWillReceiveProps(){
+        setRow(this.props.menuInOrder)
+    }
 
+    
     render() {
-        const { orderselect, menuInOrder, classes } = this.props
+        const { orderselect, classes , menuInOrder} = this.props
         
         if (!orderselect)
             return <h1>loading........</h1>
 
         // ค่าที่จะใช้แสดงปริ้นได้แต่เอามาmap ไม่ได้
-        // console.log(menuInOrder)
-
+        //console.log(menuInOrder)
+        //console.log(rows);
+        //setRow(menuInOrder)
+        
         return (
             <Fragment>
                 <Paper className={classes.root}>

@@ -17,7 +17,8 @@ export const loadOrder = () => {
                     no: index,
                     orderList: items[item].orderKeyList,
                     orderBy: items[item].orderBy,
-                    status: items[item].status
+                    status: items[item].status,
+                    tel: items[item].tel,
                 })
             }
             dispatch({

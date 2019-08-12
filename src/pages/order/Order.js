@@ -59,7 +59,7 @@ class Order extends Component {
         return (
             <Fragment>
                 <div className={classes.root}>
-                    <Grid container spacing={3} >
+                    <Grid container spacing={1} >
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
@@ -67,7 +67,7 @@ class Order extends Component {
                                 </List>
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={9} >
+                        <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
                                 <OrderSelect menuList={menuList} menu={orders[orderSelect]} />
                             </Paper>

@@ -30,20 +30,41 @@ function orders(state = [], action){
     }
 }
 
-function menuInOrder(state = [], action){
-    switch (action.type){
-        case 'menuInOrder':
+function menuList(state = [] ,action){
+    switch(action.type){
+        case 'menuList':
             return action.payload
         default:
             return state
     }
 }
 
+
+function sideBarName(state = "Coffee Management System",action){
+    switch(action.type){
+        case 'sideBarName':
+            return action.payload
+        default:
+            return state
+    }
+}
+
+// function menuInOrder(state = [], action){
+//     switch (action.type){
+//         case 'menuInOrder':
+//             return action.payload
+//         default:
+//             return state
+//     }
+// }
+
 const reducers = combineReducers({
     tabValue: changetabValue,
     orders: orders,
     orderSelect: orderSelect,
-    menuInOrder: menuInOrder
+    menuList: menuList,
+    sideBarName: sideBarName
+    // menuInOrder: menuInOrder
 })
 
 export default reducers

@@ -8,17 +8,17 @@ export const loadOrder = () => {
             let items = snapshot.val();
             let newitem = [];
             let index = -1;
-            for(let item in items){
+            for (let item in items) {
                 index++
                 newitem.push({
                     key: item,
                     location1: items[item].location1,
                     location2: items[item].location2,
-                    no:index,
-                    orderList:items[item].orderList,
-                    orderBy:items[item].orderBy,
+                    no: index,
+                    orderList: items[item].orderKeyList,
+                    orderBy: items[item].orderBy,
                     status: items[item].status
-                 })
+                })
             }
             dispatch({
                 type: 'loadOrder',
@@ -29,28 +29,27 @@ export const loadOrder = () => {
 }
 
 
-export const loadMenuSelect = (orderselect) =>{
+export const loadmenu = () => {
     return (dispatch) => {
-        let menuTemp = []
-        orderselect.orderList.map(item => {
-            firebase.database().ref(`menu/${item.key}`).on('value', function (snapshot) {
-                menuTemp.push(createRow(snapshot.val().name, item.amount, snapshot.val().price))
-            });
-            return ''
-        })
-        dispatch({
-            type: 'menuInOrder',
-            payload: menuTemp
+        const itemsRef = firebase.database().ref('menu');
+        itemsRef.on('value', (snapshot) => {
+            let items = snapshot.val();
+            let newitem = [];
+            let index = -1;
+            for (let item in items) {
+                index++
+                newitem.push({
+                    key: item,
+                    image: items[item].image,
+                    name: items[item].name,
+                    no: index,
+                    price: items[item].price,
+                })
+            }
+            dispatch({
+                type: 'menuList',
+                payload: newitem
+            })
         })
     }
-}
-
-
-function priceRow(qty, unit) {
-    return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-    const price = priceRow(qty, unit);
-    return { desc, qty, unit, price };
 }

@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/styles';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
-import { loadOrder } from '../../actions'
+import { loadOrder, loadmenu } from '../../actions'
 import OrderList from './OrderList'
 import OrderSelect from './OrderSelect'
 
@@ -28,7 +28,7 @@ const styles = {
         maxHeight: 550,
         height: 550
     },
-    slectedItemStyle:{
+    slectedItemStyle: {
         backgroundColor: 'red'
     }
 }
@@ -46,14 +46,16 @@ TabContainer.propTypes = {
 };
 
 class Order extends Component {
-    
+
     componentDidMount() {
+        // document.title = this.props.title
+        this.props.sideBarName(this.props.title)
         this.props.dispatch(loadOrder())
+        this.props.dispatch(loadmenu())
     }
 
     render() {
-        let { classes, orders, dispatch,orderSelect } = this.props;
-
+        let { classes, orders, dispatch, orderSelect, menuList } = this.props;
         return (
             <Fragment>
                 <div className={classes.root}>
@@ -61,13 +63,13 @@ class Order extends Component {
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={orders}  orderSelect={orderSelect} onSelectOrder={(item) => dispatch({type: 'orderSelect',payload: item.no})}></OrderList>
+                                    <OrderList orders={orders} orderSelect={orderSelect} onSelectOrder={(item) => dispatch({ type: 'orderSelect', payload: item.no })}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} sm={9} >
                             <Paper className={classes.paperright}>
-                                <OrderSelect orderselect={orders[orderSelect]}/>
+                                <OrderSelect menuList={menuList} menu={orders[orderSelect]} />
                             </Paper>
                         </Grid>
                     </Grid>
@@ -82,7 +84,8 @@ function mapStatetoProps(state) {
     return {
         tabValue: state.tabValue,
         orders: state.orders,
-        orderSelect: state.orderSelect
+        orderSelect: state.orderSelect,
+        menuList: state.menuList
     }
 }
 

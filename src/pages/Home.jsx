@@ -70,8 +70,6 @@ export default class Home extends Component {
             status: true
         }
     }
-
-
     
     render() {
         return (

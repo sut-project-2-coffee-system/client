@@ -22,6 +22,8 @@ import { Link } from 'react-router-dom';
 import PeopleIcon from '@material-ui/icons/PeopleOutlineRounded';
 import HomeIcon from '@material-ui/icons/HomeSharp'
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenuRounded'
+import { connect } from 'react-redux'
+import Member from '../../pages/member/Member'
 
 const drawerWidth = 240;
 
@@ -86,7 +88,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function MiniDrawer() {
+function MiniDrawer({sideBarName,dispatch}) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -121,7 +123,7 @@ export default function MiniDrawer() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Mini variant drawer
+                        {sideBarName}
           </Typography>
                 </Toolbar>
             </AppBar>
@@ -165,8 +167,8 @@ export default function MiniDrawer() {
                 <div className={classes.toolbar} />
                 <Switch>
                     <Route exact path="/" render={() => <Redirect to="/home" />} />
-                    <Route exact path="/Order" component={Order} />
-                    <Route exact path="/Pages" component={() => "Pages"} />
+                    <Route exact path="/Order"  render={(props) => <Order {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/Member" render={(props) => <Member {...props} title={"Member Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/faq" component={() => "FAQ"} />
                     <Route exact path="/contact" component={() => "Contact"} />
                     <Route exact path="/Home-1" component={() => "Home-1"} />
@@ -183,3 +185,12 @@ export default function MiniDrawer() {
         </div>
     );
 }
+
+
+function mapStatetoProps(state) {
+    return {
+        sideBarName: state.sideBarName,
+    }
+}
+
+export default connect(mapStatetoProps)(MiniDrawer)

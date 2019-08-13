@@ -16,7 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Switch, Route } from 'react-router-dom';
-import Order from '../../pages/order/Order';
+import OrderMain from '../../pages/order/OrderMain';
 import { Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import PeopleIcon from '@material-ui/icons/PeopleOutlineRounded';
@@ -167,7 +167,7 @@ function MiniDrawer({sideBarName,dispatch}) {
                 <div className={classes.toolbar} />
                 <Switch>
                     <Route exact path="/" render={() => <Redirect to="/home" />} />
-                    <Route exact path="/Order"  render={(props) => <Order {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/Order"  render={(props) => <OrderMain {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Member" render={(props) => <Member {...props} title={"Member Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/faq" component={() => "FAQ"} />
                     <Route exact path="/contact" component={() => "Contact"} />

@@ -6,9 +6,9 @@ import { withStyles } from '@material-ui/styles';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
-import { loadOrder, loadmenu } from '../../actions'
-import OrderList from './OrderList'
-import OrderSelect from './OrderSelect'
+import { loadOrderByStatus, loadmenu } from '../../../actions'
+import OrderList from './OrderListDoing'
+import OrderSelect from './OrderSelectDoing'
 
 const styles = {
     root: {
@@ -45,17 +45,17 @@ TabContainer.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-class Order extends Component {
+class OrderDoing extends Component {
 
     componentDidMount() {
         // document.title = this.props.title
-        this.props.sideBarName(this.props.title)
-        this.props.dispatch(loadOrder())
+        // this.props.sideBarName(this.props.title)
+        this.props.dispatch(loadOrderByStatus('doing','loadOrderByStatusDoing'))
         this.props.dispatch(loadmenu())
     }
 
     render() {
-        let { classes, orders, dispatch, orderSelect, menuList } = this.props;
+        let { classes, OrderByStatusDoing, dispatch, orderSelectDoing, menuList } = this.props;
         return (
             <Fragment>
                 <div className={classes.root}>
@@ -63,13 +63,13 @@ class Order extends Component {
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={orders} orderSelect={orderSelect} onSelectOrder={(item) => dispatch({ type: 'orderSelect', payload: item.no })}></OrderList>
+                                    <OrderList orders={OrderByStatusDoing} orderSelect={orderSelectDoing} onSelectOrder={(item) => dispatch({ type: 'orderSelectDoing', payload: item.no })}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
-                                <OrderSelect menuList={menuList} menu={orders[orderSelect]} />
+                                <OrderSelect menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />
                             </Paper>
                         </Grid>
                     </Grid>
@@ -83,15 +83,15 @@ class Order extends Component {
 function mapStatetoProps(state) {
     return {
         tabValue: state.tabValue,
-        orders: state.orders,
-        orderSelect: state.orderSelect,
+        OrderByStatusDoing: state.OrderByStatusDoing,
+        orderSelectDoing: state.orderSelectDoing,
         menuList: state.menuList
     }
 }
 
-Order.propTypes = {
+OrderDoing.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 
-export default connect(mapStatetoProps)(withStyles(styles)(Order));
+export default connect(mapStatetoProps)(withStyles(styles)(OrderDoing));

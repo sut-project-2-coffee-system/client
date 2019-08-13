@@ -6,7 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import './Order.css'
+import '../Order.css'
 
 const styles = {
     root: {
@@ -17,6 +17,7 @@ const styles = {
 class OrderList extends Component {
 
     handleClick =(item) => {
+        console.log(this.props.orderSelect)
         this.props.onSelectOrder(item)
     }
 

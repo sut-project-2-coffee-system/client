@@ -19,10 +19,40 @@ export const loadOrder = () => {
                     orderBy: items[item].orderBy,
                     status: items[item].status,
                     tel: items[item].tel,
+                    userImage: items[item].userImage
                 })
             }
             dispatch({
                 type: 'loadOrder',
+                payload: newitem
+            })
+        })
+    }
+}
+
+export const loadOrderByStatus = (statusName,type) => {
+    return (dispatch) => {
+        const itemsRef = firebase.database().ref('order');
+        itemsRef.orderByChild('status').equalTo(statusName).on('value', function (snapshot) {
+            let items = snapshot.val();
+            let newitem = [];
+            let index = -1;
+            for (let item in items) {
+                index++
+                newitem.push({
+                    key: item,
+                    location1: items[item].location1,
+                    location2: items[item].location2,
+                    no: index,
+                    orderList: items[item].orderKeyList,
+                    orderBy: items[item].orderBy,
+                    status: items[item].status,
+                    tel: items[item].tel,
+                    userImage: items[item].userImage
+                })
+            }
+            dispatch({
+                type: type,
                 payload: newitem
             })
         })

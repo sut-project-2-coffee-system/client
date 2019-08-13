@@ -12,23 +12,42 @@ function changetabValue(state = 1,action){
 }
 
 
-function orderSelect(state = 0, action) {
+function orderSelectWait(state = 0, action) {
     switch (action.type) {
-        case 'orderSelect':
+        case 'orderSelectWait':
             return action.payload
         default:
                 return state
     }
 }
 
-function orders(state = [], action){
+function orderSelectDoing(state = 0, action) {
+    switch (action.type) {
+        case 'orderSelectDoing':
+            return action.payload
+        default:
+                return state
+    }
+}
+
+function loadOrderByStatusDoing(state = [], action){
     switch (action.type){
-        case 'loadOrder':
+        case 'loadOrderByStatusDoing':
             return action.payload
         default:
             return state
     }
 }
+
+function loadOrderByStatusWait(state = [], action){
+    switch (action.type){
+        case 'loadOrderByStatusWait':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 
 function menuList(state = [] ,action){
     switch(action.type){
@@ -40,6 +59,7 @@ function menuList(state = [] ,action){
 }
 
 
+
 function sideBarName(state = "Coffee Management System",action){
     switch(action.type){
         case 'sideBarName':
@@ -49,19 +69,12 @@ function sideBarName(state = "Coffee Management System",action){
     }
 }
 
-// function menuInOrder(state = [], action){
-//     switch (action.type){
-//         case 'menuInOrder':
-//             return action.payload
-//         default:
-//             return state
-//     }
-// }
-
 const reducers = combineReducers({
     tabValue: changetabValue,
-    orders: orders,
-    orderSelect: orderSelect,
+    OrderByStatusDoing: loadOrderByStatusDoing,
+    OrderByStatusWait: loadOrderByStatusWait,
+    orderSelectWait: orderSelectWait,
+    orderSelectDoing: orderSelectDoing,
     menuList: menuList,
     sideBarName: sideBarName
     // menuInOrder: menuInOrder

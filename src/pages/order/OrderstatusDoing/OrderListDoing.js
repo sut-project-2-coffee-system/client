@@ -28,7 +28,7 @@ class OrderList extends Component {
                     return (    
                             <ListItem key={item.key} alignItems="flex-start" divider button   selected={orderSelect === item.no} onClick={() => this.handleClick(item)}>
                                 <ListItemAvatar>
-                                    <Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/-c9ZIXNb2I_M/XLBId31csII/AAAAAAAAABM/6Uf6kEzqNpEoxeB8CncJ89mPeiXmM815gCEwYBhgL/w140-h140-p/40273343.jpg" />
+                                    <Avatar alt="Remy Sharp" src={item.userImage} />
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={"ออเดอร์ที่: "+ (item.no+1)}

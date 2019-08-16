@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { loadOrderByStatus, loadmenu } from '../../../actions'
 import OrderList from './OrderListDoing'
 import OrderSelect from './OrderSelectDoing'
+import OrderCard from './OrderCard'
 
 const styles = {
     root: {
@@ -69,6 +70,7 @@ class OrderDoing extends Component {
                         </Grid>
                         <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
+                                <OrderCard orderselect={OrderByStatusDoing[orderSelectDoing]}></OrderCard>
                                 <OrderSelect menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />
                             </Paper>
                         </Grid>

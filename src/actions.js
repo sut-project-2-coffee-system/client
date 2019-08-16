@@ -19,7 +19,9 @@ export const loadOrder = () => {
                     orderBy: items[item].orderBy,
                     status: items[item].status,
                     tel: items[item].tel,
-                    userImage: items[item].userImage
+                    userImage: items[item].lineProfile.pictureUrl,
+                    displayName: items[item].lineProfile.displayName,
+                    userId: items[item].lineProfile.userId
                 })
             }
             dispatch({
@@ -48,7 +50,9 @@ export const loadOrderByStatus = (statusName,type) => {
                     orderBy: items[item].orderBy,
                     status: items[item].status,
                     tel: items[item].tel,
-                    userImage: items[item].userImage
+                    userImage: items[item].lineProfile.pictureUrl,
+                    displayName: items[item].lineProfile.displayName,
+                    userId: items[item].lineProfile.userId
                 })
             }
             dispatch({

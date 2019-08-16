@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { loadOrderByStatus, loadmenu } from '../../../actions'
 import OrderList from './OrderListWait'
 import OrderSelect from './OrderSelectWait'
+import OrderCard from './OrderCard'
 
 const styles = {
     root: {
@@ -50,7 +51,7 @@ class OrderWait extends Component {
     componentDidMount() {
         // document.title = this.props.title
         // this.props.sideBarName(this.props.title)
-        this.props.dispatch(loadOrderByStatus('wait','loadOrderByStatusWait'))
+        this.props.dispatch(loadOrderByStatus('wait', 'loadOrderByStatusWait'))
         this.props.dispatch(loadmenu())
     }
 
@@ -69,6 +70,7 @@ class OrderWait extends Component {
                         </Grid>
                         <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
+                                <OrderCard orderselect={OrderByStatusWait[orderSelectWait]}></OrderCard>
                                 <OrderSelect menuList={menuList} menu={OrderByStatusWait[orderSelectWait]} />
                             </Paper>
                         </Grid>

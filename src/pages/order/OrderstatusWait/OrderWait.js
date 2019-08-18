@@ -8,9 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
 import { loadOrderByStatus, loadmenu } from '../../../actions'
 import OrderList from './OrderListWait'
-import OrderSelect from './OrderSelectWait'
 import OrderCard from './OrderCard'
-
+import OrderTable from '../OrderTable'
 const styles = {
     root: {
         flexGrow: 1,
@@ -71,7 +70,7 @@ class OrderWait extends Component {
                         <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
                                 <OrderCard orderselect={OrderByStatusWait[orderSelectWait]}></OrderCard>
-                                <OrderSelect menuList={menuList} menu={OrderByStatusWait[orderSelectWait]} />
+                                <OrderTable menuList={menuList} menu={OrderByStatusWait[orderSelectWait]} />
                             </Paper>
                         </Grid>
                     </Grid>

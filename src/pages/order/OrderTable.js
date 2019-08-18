@@ -50,7 +50,6 @@ function setRow(menuList,orderList) {
     invoiceSubtotal = subtotal(rows);
     invoiceTaxes = TAX_RATE * invoiceSubtotal;
     invoiceTotal = invoiceTaxes + invoiceSubtotal;
-    
 }
 
 let rows = [
@@ -63,7 +62,7 @@ let invoiceSubtotal = subtotal(rows);
 let invoiceTaxes = TAX_RATE * invoiceSubtotal;
 let invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-export default function OrderSelect(props) {
+export default function OrderTable(props) {
   const classes = useStyles();
   if(props.menu && Object.keys(props.menuList).length > 0){
         setRow(props.menuList,props.menu.orderList)

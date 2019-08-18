@@ -48,6 +48,15 @@ function loadOrderByStatusWait(state = [], action){
     }
 }
 
+function loadOrderByStatusDone(state = [], action){
+    switch (action.type){
+        case 'loadOrderByStatusDone':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 
 function menuList(state = [] ,action){
     switch(action.type){
@@ -71,6 +80,7 @@ function sideBarName(state = "Coffee Management System",action){
 
 const reducers = combineReducers({
     tabValue: changetabValue,
+    OrderByStatusDone: loadOrderByStatusDone,
     OrderByStatusDoing: loadOrderByStatusDoing,
     OrderByStatusWait: loadOrderByStatusWait,
     orderSelectWait: orderSelectWait,

@@ -21,9 +21,13 @@ import { Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import PeopleIcon from '@material-ui/icons/PeopleOutlineRounded';
 import HomeIcon from '@material-ui/icons/HomeSharp'
+import HistoryIcon from '@material-ui/icons/History'
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenuRounded'
 import { connect } from 'react-redux'
 import Member from '../../pages/member/Member'
+import Menu from '../../pages/menu/menu'
+import History from '../../pages/history/History'
+
 
 const drawerWidth = 240;
 
@@ -160,6 +164,14 @@ function MiniDrawer({sideBarName,dispatch}) {
                         <ListItemIcon><RestaurantMenuIcon style={{fontSize: 40}}/></ListItemIcon>
                         <ListItemText primary="order" ></ListItemText>
                     </ListItem>
+                    <ListItem component={Link} to="/history">
+                        <ListItemIcon><HistoryIcon style={{fontSize: 40}}/></ListItemIcon>
+                        <ListItemText primary="history" ></ListItemText>
+                    </ListItem>
+                    <ListItem component={Link} to="/menu">
+                        <ListItemIcon><MenuIcon style={{fontSize: 40}}/></ListItemIcon>
+                        <ListItemText primary="order" ></ListItemText>
+                    </ListItem>
                 </List>
                 <Divider />
             </Drawer>
@@ -169,8 +181,8 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <Route exact path="/" render={() => <Redirect to="/home" />} />
                     <Route exact path="/Order"  render={(props) => <OrderMain {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Member" render={(props) => <Member {...props} title={"Member Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
-                    <Route exact path="/faq" component={() => "FAQ"} />
-                    <Route exact path="/contact" component={() => "Contact"} />
+                    <Route exact path="/menu" render={(props) => <Menu {...props} title={"Menu Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/history" render={(props) => <History {...props} title={"History Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Home-1" component={() => "Home-1"} />
                     <Route exact path="/Home-2" component={() => "Home-2"} />
                     <Route exact path="/Home-3" component={() => "Home-3"} />

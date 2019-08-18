@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
 import { loadOrderByStatus, loadmenu } from '../../../actions'
 import OrderList from './OrderListDoing'
-import OrderSelect from './OrderSelectDoing'
+import OrderTable from '../OrderTable'
 import OrderCard from './OrderCard'
 
 const styles = {
@@ -71,7 +71,7 @@ class OrderDoing extends Component {
                         <Grid item xs={12} sm={8} >
                             <Paper className={classes.paperright}>
                                 <OrderCard orderselect={OrderByStatusDoing[orderSelectDoing]}></OrderCard>
-                                <OrderSelect menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />
+                                <OrderTable menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />
                             </Paper>
                         </Grid>
                     </Grid>

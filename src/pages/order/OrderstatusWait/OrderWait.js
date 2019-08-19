@@ -26,7 +26,8 @@ const styles = {
         marginBottom: 20,
         overflow: 'auto',
         maxHeight: 550,
-        height: 550
+        height: 550,
+        width: 700
     },
     slectedItemStyle: {
         backgroundColor: 'red'

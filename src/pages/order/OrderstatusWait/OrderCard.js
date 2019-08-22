@@ -27,9 +27,14 @@ const useStyles = makeStyles({
 });
 
 async function handleClick(order) {
-  order.status = 'doing'
-  firebase.database().ref(`order/${order.key}`).update(order)
-  let msg = 'เรียนคุณ'+order.orderBy+' ตอนนี้ออเดอร์ของคุณกำลังทำอยู่ครับ'
+  let orderTarget
+  firebase.database().ref(`order/${order.key}`).on('value', function (snapshot) {
+    orderTarget=snapshot.val()
+    orderTarget.status = 'doing';
+    orderTarget.time = firebase.database.ServerValue.TIMESTAMP
+  });
+  firebase.database().ref(`order/${order.key}`).update(orderTarget)
+  let msg = 'เรียนคุณ' + order.orderBy + ' ตอนนี้ออเดอร์ของคุณกำลังทำอยู่ครับ'
   await fetch('https://us-central1-coffe-system-yiakpd.cloudfunctions.net/LineMessagingAPI', {
     method: "POST",
     mode: "cors",
@@ -49,7 +54,7 @@ async function handleClick(order) {
 
 export default function OrderCard(props) {
   const classes = useStyles();
-  
+
   if (!props.orderselect)
     return ''
   return (

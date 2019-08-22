@@ -12,6 +12,7 @@ class History extends Component {
     }
 
     componentDidMount(){
+      console.log(Date.now())
         this.props.dispatch(loadOrderByStatus('done','loadOrderByStatusDone'))
         this.props.dispatch(loadmenu())
     }

@@ -27,8 +27,13 @@ const useStyles = makeStyles({
 });
 
 async function handleClick(order) {
-  order.status = 'done'
-  firebase.database().ref(`order/${order.key}`).update(order)
+  let orderTarget
+  firebase.database().ref(`order/${order.key}`).on('value', function (snapshot) {
+    orderTarget=snapshot.val()
+    orderTarget.status = 'done'
+    orderTarget.time = firebase.database.ServerValue.TIMESTAMP
+  });
+  firebase.database().ref(`order/${order.key}`).update(orderTarget)
   let msg = 'เรียนคุณ'+order.orderBy+' ตอนนี้ออเดอร์ของคุณทำเสร็จแล้วครับ'
   await fetch('https://us-central1-coffe-system-yiakpd.cloudfunctions.net/LineMessagingAPI', {
     method: "POST",

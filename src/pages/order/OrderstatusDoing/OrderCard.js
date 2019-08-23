@@ -31,7 +31,7 @@ async function handleClick(order) {
   firebase.database().ref(`order/${order.key}`).on('value', function (snapshot) {
     orderTarget=snapshot.val()
     orderTarget.status = 'done'
-    orderTarget.time = firebase.database.ServerValue.TIMESTAMP
+    orderTarget.timestamp = Date.now()
   });
   firebase.database().ref(`order/${order.key}`).update(orderTarget)
   let msg = 'เรียนคุณ'+order.orderBy+' ตอนนี้ออเดอร์ของคุณทำเสร็จแล้วครับ'

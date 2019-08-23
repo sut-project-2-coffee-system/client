@@ -60,15 +60,15 @@ class OrderDoing extends Component {
         return (
             <Fragment>
                 <div className={classes.root}>
-                    <Grid container spacing={1} >
+                    <Grid container spacing={2} >
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={OrderByStatusDoing} orderSelect={orderSelectDoing} onSelectOrder={(item) => dispatch({ type: 'orderSelectDoing', payload: item.no })}></OrderList>
+                                    <OrderList orders={OrderByStatusDoing} orderSelect={orderSelectDoing} onSelectOrder={(item) => dispatch({ type: 'orderSelectDoing', payload: item })}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={8} >
+                        <Grid item xs={12} sm={9} >
                             <Paper className={classes.paperright}>
                                 <OrderCard orderselect={OrderByStatusDoing[orderSelectDoing]}></OrderCard>
                                 <OrderTable menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />

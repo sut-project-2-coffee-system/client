@@ -16,17 +16,17 @@ const styles = {
 
 class OrderList extends Component {
 
-    handleClick =(item) => {
-        this.props.onSelectOrder(item)
+    handleClick =(item,index) => {
+        this.props.onSelectOrder(index)
     }
 
     render() {
         const { orders,classes,orderSelect } = this.props
         return (
             <div>
-                {orders.map(item => {
+                {orders.map((item,index) => {
                     return (    
-                            <ListItem key={item.key} alignItems="flex-start" divider button   selected={orderSelect === item.no} onClick={() => this.handleClick(item)}>
+                            <ListItem key={item.key} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(item,index)}>
                                 <ListItemAvatar>
                                     <Avatar alt="Remy Sharp" src={item.userImage} />
                                 </ListItemAvatar>

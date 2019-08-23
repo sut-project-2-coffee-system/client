@@ -43,6 +43,8 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
+    padding: theme.spacing(1),
   },
 }));
 

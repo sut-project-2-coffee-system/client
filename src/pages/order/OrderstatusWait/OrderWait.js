@@ -59,15 +59,15 @@ class OrderWait extends Component {
         return (
             <Fragment>
                 <div className={classes.root}>
-                    <Grid container spacing={1} >
+                    <Grid container spacing={2} >
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={OrderByStatusWait} orderSelect={orderSelectWait} onSelectOrder={(item) => dispatch({ type: 'orderSelectWait', payload: item.no })}></OrderList>
+                                    <OrderList orders={OrderByStatusWait} orderSelect={orderSelectWait} onSelectOrder={(item) => dispatch({ type: 'orderSelectWait', payload: item })}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={8} >
+                        <Grid item xs={12} sm={9} >
                             <Paper className={classes.paperright}>
                                 <OrderCard orderselect={OrderByStatusWait[orderSelectWait]}></OrderCard>
                                 <OrderTable menuList={menuList} menu={OrderByStatusWait[orderSelectWait]} />

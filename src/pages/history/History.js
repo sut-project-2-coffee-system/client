@@ -12,7 +12,6 @@ class History extends Component {
     }
 
     componentDidMount(){
-      console.log(Date.now())
         this.props.dispatch(loadOrderByStatus('done','loadOrderByStatusDone'))
         this.props.dispatch(loadmenu())
     }
@@ -39,16 +38,19 @@ class History extends Component {
                 { title: 'Name', field: 'orderBy' },
                 { title: 'เบอร์โทรศํพท์', field: 'tel' },
                 {
-                    title: 'จำนวน',
-                    field: 'amount',
-                    render: rowData => (
-                        <p>{Object.keys(rowData.orderList).length}</p>
-                    ),
+                  title: 'สถานะ',
+                  field: 'pay',
                 },
+                // {
+                //     title: 'จำนวน',
+                //     field: 'amount',
+                //     render: rowData => (
+                //         <p>{Object.keys(rowData.orderList).length}</p>
+                //     ),
+                // },
             ]}
             data={OrderByStatusDone}
             detailPanel={rowData => {
-                console.log(rowData)
               return (
                 <OrderTable menuList={menuList} menu={rowData} />
               )

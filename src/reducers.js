@@ -78,6 +78,15 @@ function sideBarName(state = "Coffee Management System",action){
     }
 }
 
+function totalPrice(state = 0 ,action){
+    switch(action.type){
+        case 'totalPrice':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 const reducers = combineReducers({
     tabValue: changetabValue,
     OrderByStatusDone: loadOrderByStatusDone,
@@ -86,7 +95,8 @@ const reducers = combineReducers({
     orderSelectWait: orderSelectWait,
     orderSelectDoing: orderSelectDoing,
     menuList: menuList,
-    sideBarName: sideBarName
+    sideBarName: sideBarName,
+    totalPrice: totalPrice
     // menuInOrder: menuInOrder
 })
 

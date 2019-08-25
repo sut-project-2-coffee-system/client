@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { connect } from 'react-redux';
 
 const TAX_RATE = 0.07;
 
@@ -37,20 +37,7 @@ function subtotal(items) {
   return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
 }
 
-function setRow(menuList,orderList) {
-  rows = []
-  orderList.forEach(orderListItem => {
-    menuList.forEach(menuListItem => {
-      if(menuListItem.key === orderListItem.key){
-        rows.push(createRow(menuListItem.name, orderListItem.amount, menuListItem.price,orderListItem.note))
-      }
-    })
-  });
-    
-    invoiceSubtotal = subtotal(rows);
-    invoiceTaxes = TAX_RATE * invoiceSubtotal;
-    invoiceTotal = invoiceTaxes + invoiceSubtotal;
-}
+
 
 let rows = [
   createRow('Paperclips (Box)', 100, 1.15,''),
@@ -62,14 +49,30 @@ let invoiceSubtotal = subtotal(rows);
 let invoiceTaxes = TAX_RATE * invoiceSubtotal;
 let invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-export default function OrderTable(props) {
+function OrderTable(props) {
   const classes = useStyles();
+  function setRow(menuList,orderList) {
+    rows = []
+    orderList.forEach(orderListItem => {
+      menuList.forEach(menuListItem => {
+        if(menuListItem.key === orderListItem.key){
+          rows.push(createRow(menuListItem.name, orderListItem.amount, menuListItem.price,orderListItem.note))
+        }
+      })
+    });
+      
+      invoiceSubtotal = subtotal(rows);
+      invoiceTaxes = TAX_RATE * invoiceSubtotal;
+      invoiceTotal = invoiceTaxes + invoiceSubtotal;
+      props.dispatch({ type: 'totalPrice', payload: invoiceTotal })
+  }
+
   if(props.menu && Object.keys(props.menuList).length > 0){
         setRow(props.menuList,props.menu.orderList)
   }
   return (
     <div>
-      <Paper className={classes.root}>
+
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -106,7 +109,15 @@ export default function OrderTable(props) {
           </TableRow>
         </TableBody>
       </Table>
-    </Paper>
+
     </div>
   );
 }
+
+const mapStateToProps = function(state) {
+  return {
+    totalPrice: state.totalPrice
+  }
+}
+
+export default connect(mapStateToProps)(OrderTable);

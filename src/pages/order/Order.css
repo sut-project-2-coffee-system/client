@@ -1,3 +1,7 @@
 .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover{
-    background-color: #0336ff !important
+    background-color: #fddfdf !important
+}
+.MuiTab-textColorPrimary.Mui-selected {
+    color: #3f51b5;
+    background-color: #def3fd !important
 }

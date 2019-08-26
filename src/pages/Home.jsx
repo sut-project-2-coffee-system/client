@@ -87,7 +87,7 @@ export default class Home extends Component {
                             </Typography>
                         </Grid>
                         <Grid item lg={8} sm={10} container direction="row" justify="space-evenly" >
-                            <Bigbutton to="/member" onclick="activateLasers()" text="Cashier" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fcashier%20(1).svg?alt=media&token=b1a52dee-1c7e-4a47-9e30-d50aa27f308d" />
+                            <Bigbutton to="/cashier" onclick="activateLasers()" text="Cashier" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fcashier%20(1).svg?alt=media&token=b1a52dee-1c7e-4a47-9e30-d50aa27f308d" />
                             <Bigbutton to="/order" text="Order" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fmenu.svg?alt=media&token=73832d6e-0000-4d25-9f8d-e8599e86e021" />
                             <Bigbutton to="/history" text="History" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fhistory.svg?alt=media&token=52479cd4-fb36-4097-8742-d9c3587f16c7" />
                         </Grid>

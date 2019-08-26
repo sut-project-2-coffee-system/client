@@ -62,6 +62,8 @@ function menuList(state = [], action) {
     switch (action.type) {
         case 'menuList':
             return action.payload
+        case 'RESET_MENU_LIST_AMOUNT':
+            return state
         default:
             return state
     }
@@ -111,6 +113,24 @@ function sideBarName(state = "Coffee Management System", action) {
             return state
     }
 }
+const INIT = { arr: [] }
+function shoppingCart(state = INIT, action) {
+    switch (action.type) {
+        case 'orderInOrderList':
+            return { ...state, arr: action.menuSelectList }
+        case 'addAmount':
+            if(action.arr.amount < 1)
+                state.arr.splice(action.i,1)
+            else
+                state.arr[action.i] = action.arr
+            return { ...state, ...state }
+        case 'clearOrder':
+            return { ...state, arr: [] }
+        default:
+            return state
+    }
+}
+
 
 function totalPrice(state = 0, action) {
     switch (action.type) {
@@ -131,7 +151,8 @@ const reducers = combineReducers({
     menuList: menuList,
     sideBarName: sideBarName,
     totalPrice: totalPrice,
-    testList: testList
+    testList: testList,
+    shoppingCart: shoppingCart,
     // menuInOrder: menuInOrder
 })
 

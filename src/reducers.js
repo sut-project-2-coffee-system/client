@@ -1,7 +1,7 @@
-import { combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
-function changetabValue(state = 1,action){
-    switch (action.type){
+function changetabValue(state = 1, action) {
+    switch (action.type) {
         case 'tab0':
             return 0
         case 'tab1':
@@ -17,7 +17,7 @@ function orderSelectWait(state = 0, action) {
         case 'orderSelectWait':
             return action.payload
         default:
-                return state
+            return state
     }
 }
 
@@ -26,12 +26,12 @@ function orderSelectDoing(state = 0, action) {
         case 'orderSelectDoing':
             return action.payload
         default:
-                return state
+            return state
     }
 }
 
-function loadOrderByStatusDoing(state = [], action){
-    switch (action.type){
+function loadOrderByStatusDoing(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusDoing':
             return action.payload
         default:
@@ -39,8 +39,8 @@ function loadOrderByStatusDoing(state = [], action){
     }
 }
 
-function loadOrderByStatusWait(state = [], action){
-    switch (action.type){
+function loadOrderByStatusWait(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusWait':
             return action.payload
         default:
@@ -48,8 +48,8 @@ function loadOrderByStatusWait(state = [], action){
     }
 }
 
-function loadOrderByStatusDone(state = [], action){
-    switch (action.type){
+function loadOrderByStatusDone(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusDone':
             return action.payload
         default:
@@ -58,8 +58,8 @@ function loadOrderByStatusDone(state = [], action){
 }
 
 
-function menuList(state = [] ,action){
-    switch(action.type){
+function menuList(state = [], action) {
+    switch (action.type) {
         case 'menuList':
             return action.payload
         default:
@@ -68,9 +68,43 @@ function menuList(state = [] ,action){
 }
 
 
+const initstate = {
+    arr:[]
+}
+function testList(state = initstate, action) {
+    switch (action.type) {
+        case 'testList':
+            return{
+                ...state,
+                arr: action.payload
+            }  
 
-function sideBarName(state = "Coffee Management System",action){
-    switch(action.type){
+        case 'SetNull':
+            return{
+                ...state,
+                arr: []
+            }  
+        case 'Edit':
+            return{
+                ...state,
+                arr: state.arr.map(
+                    (arr, i) => i === 0 ? {...arr, amount: arr.amount+1
+                                            ,name: arr.name + '1'
+                                          } 
+                                            : arr
+                )
+            }  
+
+        default:
+            return state
+    }
+}
+
+
+
+
+function sideBarName(state = "Coffee Management System", action) {
+    switch (action.type) {
         case 'sideBarName':
             return action.payload
         default:
@@ -78,8 +112,8 @@ function sideBarName(state = "Coffee Management System",action){
     }
 }
 
-function totalPrice(state = 0 ,action){
-    switch(action.type){
+function totalPrice(state = 0, action) {
+    switch (action.type) {
         case 'totalPrice':
             return action.payload
         default:
@@ -96,7 +130,8 @@ const reducers = combineReducers({
     orderSelectDoing: orderSelectDoing,
     menuList: menuList,
     sideBarName: sideBarName,
-    totalPrice: totalPrice
+    totalPrice: totalPrice,
+    testList: testList
     // menuInOrder: menuInOrder
 })
 

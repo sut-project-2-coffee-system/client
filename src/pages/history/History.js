@@ -70,11 +70,12 @@ class History extends Component {
           onRowClick={(event, selectedRow, togglePanel) => { togglePanel(); this.setState({ selectedRow }) }}
           options={{
             rowStyle: rowData => ({
-              backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#8187ff' : '#8187ff'
+              backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#F5E1FD' : '#F5E1FD  ',
+
             }),
             headerStyle: {
-              backgroundColor: '#0031ca',
-              color: '#FFF'
+              backgroundColor: '#CE9DD9',
+              color: 'black'
             },
           }}
         />

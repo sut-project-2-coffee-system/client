@@ -77,9 +77,10 @@ function FullScreenDialog(props) {
     }
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <IconButton aria-label="navigation" color="primary" className={classes.margin} onClick={handleClickOpen}>
                 <Icon >send</Icon>
-            </Button>
+            </IconButton>
+
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
@@ -137,7 +138,7 @@ function FullScreenDialog(props) {
                                     ราคารวม: {props.totalPrice}
                                 </Typography>
                                 <Typography style={{ fontSize: 28 }} color="textSecondary" gutterBottom>
-                                    ทอน: {input - props.totalPrice}
+                                    ทอน: {(input - props.totalPrice).toFixed(2)}
                                 </Typography>
                             </Paper>
                         </Grid>

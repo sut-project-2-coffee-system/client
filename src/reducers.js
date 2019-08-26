@@ -1,7 +1,8 @@
-import { combineReducers} from 'redux'
 
-function changetabValue(state = 1,action){
-    switch (action.type){
+import { combineReducers } from 'redux'
+
+function changetabValue(state = 1, action) {
+    switch (action.type) {
         case 'tab0':
             return 0
         case 'tab1':
@@ -17,7 +18,7 @@ function orderSelectWait(state = 0, action) {
         case 'orderSelectWait':
             return action.payload
         default:
-                return state
+            return state
     }
 }
 
@@ -26,12 +27,12 @@ function orderSelectDoing(state = 0, action) {
         case 'orderSelectDoing':
             return action.payload
         default:
-                return state
+            return state
     }
 }
 
-function loadOrderByStatusDoing(state = [], action){
-    switch (action.type){
+function loadOrderByStatusDoing(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusDoing':
             return action.payload
         default:
@@ -39,8 +40,8 @@ function loadOrderByStatusDoing(state = [], action){
     }
 }
 
-function loadOrderByStatusWait(state = [], action){
-    switch (action.type){
+function loadOrderByStatusWait(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusWait':
             return action.payload
         default:
@@ -48,8 +49,8 @@ function loadOrderByStatusWait(state = [], action){
     }
 }
 
-function loadOrderByStatusDone(state = [], action){
-    switch (action.type){
+function loadOrderByStatusDone(state = [], action) {
+    switch (action.type) {
         case 'loadOrderByStatusDone':
             return action.payload
         default:
@@ -58,10 +59,12 @@ function loadOrderByStatusDone(state = [], action){
 }
 
 
-function menuList(state = [] ,action){
-    switch(action.type){
+function menuList(state = [], action) {
+    switch (action.type) {
         case 'menuList':
             return action.payload
+        case 'RESET_MENU_LIST_AMOUNT':
+            return state
         default:
             return state
     }
@@ -69,14 +72,32 @@ function menuList(state = [] ,action){
 
 
 
-function sideBarName(state = "Coffee Management System",action){
-    switch(action.type){
+function sideBarName(state = "Coffee Management System", action) {
+    switch (action.type) {
         case 'sideBarName':
             return action.payload
         default:
             return state
     }
 }
+const INIT = { arr: [] }
+function shoppingCart(state = INIT, action) {
+    switch (action.type) {
+        case 'orderInOrderList':
+            return { ...state, arr: action.menuSelectList }
+        case 'addAmount':
+            if(action.arr.amount < 1)
+                state.arr.splice(action.i,1)
+            else
+                state.arr[action.i] = action.arr
+            return { ...state, ...state }
+        case 'clearOrder':
+            return { ...state, arr: [] }
+        default:
+            return state
+    }
+}
+
 
 const reducers = combineReducers({
     tabValue: changetabValue,
@@ -86,7 +107,8 @@ const reducers = combineReducers({
     orderSelectWait: orderSelectWait,
     orderSelectDoing: orderSelectDoing,
     menuList: menuList,
-    sideBarName: sideBarName
+    sideBarName: sideBarName,
+    shoppingCart: shoppingCart,
     // menuInOrder: menuInOrder
 })
 

@@ -32,7 +32,7 @@ export const loadOrder = () => {
     }
 }
 
-export const loadOrderByStatus = (statusName,type) => {
+export const loadOrderByStatus = (statusName, type) => {
     return (dispatch) => {
         const itemsRef = firebase.database().ref('order');
         itemsRef.orderByChild('status').equalTo(statusName).on('value', function (snapshot) {
@@ -88,3 +88,10 @@ export const loadmenu = () => {
         })
     }
 }
+
+export const storeShoppingCart = (menuSelectList = []) => (
+    {
+        type: 'orderInOrderList', 
+        menuSelectList
+    }
+)

@@ -10,8 +10,9 @@ import { createStore,applyMiddleware } from 'redux'
 import reducers from './reducers'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
+import logger from 'redux-logger'
 
-const store = createStore(reducers,applyMiddleware(thunk))
+const store = createStore(reducers,applyMiddleware(thunk,logger))
 
 const HomeContainer = () => (
     <div className="container">

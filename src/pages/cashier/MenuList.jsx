@@ -20,9 +20,9 @@ class MenuList extends Component {
 
         let indexData = null
         this.props.shoppingCart.arr.find((cur, i) => {
-            if (cur.key == data.key)
+            if (cur.key === data.key)
                 indexData = i
-            return cur.key == data.key
+            return cur.key === data.key
         })
 
         //console.log(indexData);
@@ -45,17 +45,17 @@ class MenuList extends Component {
     }
 
     getShoppingAmount = (data) => {
-         if (data != undefined || null) {
+         if (data !== undefined || null) {
             let datakey
-            if(data.key != undefined){
+            if(data.key !== undefined){
                 this.props.shoppingCart.arr.find((cur, i) => {
-                    if (data.key == cur.key)
+                    if (data.key === cur.key)
                     datakey = i
-                    return data.key == cur.key
+                    return data.key === cur.key
                 })
             }
             //console.log(this.props.shoppingCart.arr[key], key);
-            if (this.props.shoppingCart.arr[datakey] == undefined || null)
+            if (this.props.shoppingCart.arr[datakey] === undefined || null)
                 return 0
             else
                 return this.props.shoppingCart.arr[datakey].amount
@@ -64,7 +64,7 @@ class MenuList extends Component {
             return 0
     }
     render() {
-        let { dispatch, menuList, shoppingCart } = this.props;
+        let {menuList } = this.props;
         //console.log(this.props.shopingCart);
         //console.log(menuList);
 

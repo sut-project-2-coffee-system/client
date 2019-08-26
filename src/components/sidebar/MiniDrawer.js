@@ -25,8 +25,6 @@ import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenuRounded'
 import CashierIcon from '@material-ui/icons/ShoppingCartRounded'
 import { connect } from 'react-redux'
 import Member from '../../pages/member/Member'
-import Menu from '../../pages/menu/menu'
-import History from '../../pages/history/History'
 import './Appbar.css'
 import Cashier from '../../pages/cashier/Cashier';
 

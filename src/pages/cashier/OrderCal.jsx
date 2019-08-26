@@ -47,7 +47,7 @@ class OrderCal extends Component {
     }
     calTotal = () => {
         let total = 0
-        this.props.shoppingCart.arr.map((cur, i) => {
+        this.props.shoppingCart.arr.forEach((cur, i) => {
             total = (Number(cur.price) * Number(cur.amount)) + total
         })
         return total
@@ -56,7 +56,7 @@ class OrderCal extends Component {
         order.orderBy = "Unknow"
         order.timestamp = Date.now()
 
-        this.props.shoppingCart.arr.map((cur, i) => {
+        this.props.shoppingCart.arr.forEach((cur, i) => {
             order.orderKeyList.push(
                 {
                     "key": cur.key,
@@ -65,7 +65,7 @@ class OrderCal extends Component {
                 }
             )
         })
-        if (order.orderKeyList != []) {
+        if (order.orderKeyList !== []) {
             firebase.database().ref("order").push({
                 ...order
             })
@@ -82,8 +82,8 @@ class OrderCal extends Component {
     }
     render() {
         let date = new Date();
-        let { shoppingCart, dispatch } = this.props
-        if (shoppingCart.arr == undefined || null)
+        let { shoppingCart } = this.props
+        if (shoppingCart.arr === undefined || null)
             return null
         return (
             <div>

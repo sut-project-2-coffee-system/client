@@ -28,6 +28,7 @@ import Member from '../../pages/member/Member'
 import './Appbar.css'
 import Cashier from '../../pages/cashier/Cashier';
 import History from '../../pages/history/History'
+import HistoryIcon from '@material-ui/icons/History'
 
 const drawerWidth = 240;
 
@@ -167,6 +168,10 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <ListItem component={Link} to="/member">
                         <ListItemIcon><PeopleIcon style={{fontSize: 40}}/></ListItemIcon>
                         <ListItemText primary="member" ></ListItemText>
+                    </ListItem>
+                     <ListItem component={Link} to="/history">
+                        <ListItemIcon><HistoryIcon style={{fontSize: 40}}/></ListItemIcon>
+                     <ListItemText primary="history" ></ListItemText>
                     </ListItem>
                 </List>
                 <Divider />

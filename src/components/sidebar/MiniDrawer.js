@@ -27,6 +27,7 @@ import { connect } from 'react-redux'
 import Member from '../../pages/member/Member'
 import './Appbar.css'
 import Cashier from '../../pages/cashier/Cashier';
+import History from '../../pages/history/History'
 
 const drawerWidth = 240;
 
@@ -177,6 +178,7 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <Route exact path="/Order"  render={(props) => <OrderMain {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Member" render={(props) => <Member {...props} title={"Member Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Cashier" render={(props) => <Cashier {...props} title={"Cashier Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/history" render={(props) => <History {...props} title={"History Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/faq" component={() => "FAQ"} />
                     <Route exact path="/contact" component={() => "Contact"} />
                     <Route exact path="/Home-1" component={() => "Home-1"} />

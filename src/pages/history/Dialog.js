@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,6 +15,7 @@ import OrderTable from '../order/OrderTable'
 import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import firebase from '../../Firebase'
+import {loadmenu} from '../../actions'
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -54,6 +55,12 @@ function FullScreenDialog(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [input, setInput] = React.useState(0);
+    let totalPrice = 0;
+
+    useEffect(() => {
+        props.dispatch(loadmenu())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     function handleClickOpen() {
         setOpen(true);
@@ -66,14 +73,32 @@ function FullScreenDialog(props) {
         setInput(event.target.value)
     }
     function onSave() {
+        console.log(props.order.key)
         let orderTarget
-        firebase.database().ref(`order/${props.data.key}`).on('value', function (snapshot) {
+        firebase.database().ref(`order/${props.order.key}`).on('value', function (snapshot) {
             orderTarget = snapshot.val()
             orderTarget.pay = 'จ่ายแล้ว'
             orderTarget.timestamp = Date.now()
         });
-        firebase.database().ref(`order/${props.data.key}`).update(orderTarget)
+        firebase.database().ref(`order/${props.order.key}`).update(orderTarget)
         setOpen(false);
+    }
+    
+    function CalTotalPrice(menuList,orderList){
+        totalPrice = 0
+        orderList.forEach(orderListItem => {
+            menuList.forEach(menuListItem => {
+              if(menuListItem.key === orderListItem.key){
+                totalPrice+=menuListItem.price*orderListItem.amount
+              }
+            })
+          });
+          totalPrice = totalPrice + (totalPrice * 0.07)
+    }
+
+
+    if(props.order && Object.keys(props.menuList).length > 0){
+        CalTotalPrice(props.menuList,props.order.orderList)
     }
     return (
         <div>
@@ -135,10 +160,10 @@ function FullScreenDialog(props) {
                                     รับเงินมา: {input}
                                 </Typography>
                                 <Typography style={{ fontSize: 28 }} color="textSecondary" gutterBottom>
-                                    ราคารวม: {props.totalPrice}
+                                    ราคารวม: {totalPrice}
                                 </Typography>
                                 <Typography style={{ fontSize: 28 }} color="textSecondary" gutterBottom>
-                                    ทอน: {(input - props.totalPrice).toFixed(2)}
+                                    ทอน: {(input - totalPrice).toFixed(2)}
                                 </Typography>
                             </Paper>
                         </Grid>
@@ -151,7 +176,8 @@ function FullScreenDialog(props) {
 
 const mapStateToProps = function (state) {
     return {
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        menuList: state.menuList
     }
 }
 

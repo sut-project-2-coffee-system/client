@@ -50,7 +50,7 @@ class History extends Component {
               field: 'action',
               render: rowData => {
                 if (rowData.pay === 'ยังไม่จ่าย')
-                  return <FullScreenDialog data={rowData}/>
+                  return <FullScreenDialog order={rowData}/>
               }
             },
             // {

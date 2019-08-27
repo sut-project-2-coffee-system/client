@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -51,6 +51,7 @@ let invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 function OrderTable(props) {
   const classes = useStyles();
+
   function setRow(menuList,orderList) {
     rows = []
     orderList.forEach(orderListItem => {
@@ -64,7 +65,6 @@ function OrderTable(props) {
       invoiceSubtotal = subtotal(rows);
       invoiceTaxes = TAX_RATE * invoiceSubtotal;
       invoiceTotal = invoiceTaxes + invoiceSubtotal;
-      props.dispatch({ type: 'totalPrice', payload: invoiceTotal })
   }
 
   if(props.menu && Object.keys(props.menuList).length > 0){

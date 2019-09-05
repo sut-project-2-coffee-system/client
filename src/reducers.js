@@ -71,31 +71,32 @@ function menuList(state = [], action) {
 
 
 const initstate = {
-    arr:[]
+    arr: []
 }
 function testList(state = initstate, action) {
     switch (action.type) {
         case 'testList':
-            return{
+            return {
                 ...state,
                 arr: action.payload
-            }  
+            }
 
         case 'SetNull':
-            return{
+            return {
                 ...state,
                 arr: []
-            }  
+            }
         case 'Edit':
-            return{
+            return {
                 ...state,
                 arr: state.arr.map(
-                    (arr, i) => i === 0 ? {...arr, amount: arr.amount+1
-                                            ,name: arr.name + '1'
-                                          } 
-                                            : arr
+                    (arr, i) => i === 0 ? {
+                        ...arr, amount: arr.amount + 1
+                        , name: arr.name + '1'
+                    }
+                        : arr
                 )
-            }  
+            }
 
         default:
             return state
@@ -113,19 +114,21 @@ function sideBarName(state = "Coffee Management System", action) {
             return state
     }
 }
-const INIT = { arr: [] }
-function shoppingCart(state = INIT, action) {
+let arr = []
+function shoppingCart(state = [], action) {
     switch (action.type) {
         case 'orderInOrderList':
-            return { ...state, arr: action.menuSelectList }
+            arr.push(action.data)
+            return { ...state, arr }
         case 'addAmount':
-            if(action.arr.amount < 1)
-                state.arr.splice(action.i,1)
+            if (action.data.amount < 1)
+                state.arr.splice(action.i, 1)
             else
-                state.arr[action.i] = action.arr
+                state.arr[action.i] = action.data
             return { ...state, ...state }
         case 'clearOrder':
-            return { ...state, arr: [] }
+            arr = []
+            return { ...state, arr }
         default:
             return state
     }
@@ -141,6 +144,18 @@ function totalPrice(state = 0, action) {
     }
 }
 
+function handleDrawerOrderCal(state = false, action) {
+    switch (action.type) {
+        case "openOrderCal":
+            return state || action.data
+        case "closeOrderCal":
+            return state && action.data
+        default:
+            return state
+    }
+}
+
+
 const reducers = combineReducers({
     tabValue: changetabValue,
     OrderByStatusDone: loadOrderByStatusDone,
@@ -153,6 +168,7 @@ const reducers = combineReducers({
     totalPrice: totalPrice,
     testList: testList,
     shoppingCart: shoppingCart,
+    handleDrawerOrderCal:handleDrawerOrderCal,
     // menuInOrder: menuInOrder
 })
 

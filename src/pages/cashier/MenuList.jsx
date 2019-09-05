@@ -4,67 +4,85 @@ import { Grid } from '@material-ui/core';
 import { loadmenu } from '../../actions'
 import { connect } from 'react-redux'
 import { storeShoppingCart } from '../../actions'
+import { storeStatusOrderCalDrwer } from '../../actions'
 
 
-let menuSelectList = []
+//let menuSelectList = []
 
 class MenuList extends Component {
     componentDidMount() {
         this.props.dispatch(loadmenu())
-        this.props.dispatch(storeShoppingCart())
     }
 
 
     menuSelect(data) {
-        console.log(this.props.menuList);
+        //console.log(this.props.menuList);
 
         let indexData = null
-        this.props.shoppingCart.arr.find((cur, i) => {
-            if (cur.key === data.key)
-                indexData = i
-            return cur.key === data.key
-        })
+        if (this.props.shoppingCart.arr !== undefined) {
+            this.props.shoppingCart.arr.find((cur, i) => {
+                if (cur.key === data.key)
+                    indexData = i
+                return cur.key === data.key
+            })
+        }
+        //console.log(this.props.shoppingCart.arr);
 
         //console.log(indexData);
         if (indexData == null) {
-            data["amount"] = 1
+            data.amount = 1
             //this.props.menuList[data.no].amount = data["amount"]
-            menuSelectList.push(data)
-            this.props.dispatch(storeShoppingCart(menuSelectList))
+            //menuSelectList.push(data)
+            this.props.dispatch(storeShoppingCart(data))
         }
         else {
-            menuSelectList[indexData].amount += 1
+            data.amount += 1
             //this.props.menuList[data.no].amount = menuSelectList[indexData].amount
-            this.props.dispatch({ type: "addAmount", "i": indexData, "arr": menuSelectList[indexData] })
+            this.props.dispatch({ type: "addAmount", "i": indexData, "data": data })
+            //menuSelectList = []
         }
         //console.log(menuSelectList);
         //this.props.dispatch(storeShoppingCart(menuSelectList))
         //menuSelectList = []
+        this.props.dispatch(storeStatusOrderCalDrwer(true))
         this.forceUpdate();
 
     }
 
     getShoppingAmount = (data) => {
-         if (data !== undefined || null) {
-            let datakey
-            if(data.key !== undefined){
+        if (data !== undefined || null) {
+
+
+            /* let datakey = this.props.shoppingCart.arr.find((cur, i) => {
+                return data.key === cur.key
+            }) */
+            if (this.props.shoppingCart.arr !== undefined || null){
+                let datakey = null
                 this.props.shoppingCart.arr.find((cur, i) => {
-                    if (data.key === cur.key)
-                    datakey = i
+                    if(data.key === cur.key)
+                        datakey= i
                     return data.key === cur.key
                 })
+                if(datakey !== null){
+                    return this.props.shoppingCart.arr[datakey].amount 
+                    
+                }
+                
             }
+            
+
+
             //console.log(this.props.shoppingCart.arr[key], key);
-            if (this.props.shoppingCart.arr[datakey] === undefined || null)
-                return 0
-            else
-                return this.props.shoppingCart.arr[datakey].amount
+            //if (this.props.shoppingCart.arr[datakey] === undefined || null)
+            //    return 0
+            // else
+            //    return this.props.shoppingCart.arr[datakey].amount 
         }
-        else 
+        else
             return 0
     }
     render() {
-        let {menuList } = this.props;
+        let { menuList } = this.props;
         //console.log(this.props.shopingCart);
         //console.log(menuList);
 

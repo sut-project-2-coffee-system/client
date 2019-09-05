@@ -12,7 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { connect } from 'react-redux'
-import { storeShoppingCart } from '../../actions'
+import { storeStatusOrderCalDrwer } from '../../actions'
 let order = {
     "orderBy": "",
     "orderKeyList": [],
@@ -34,7 +34,7 @@ let order = {
 class OrderCal extends Component {
 
     componentDidMount() {
-        this.props.dispatch(storeShoppingCart())
+        //this.props.dispatch(storeShoppingCart())
     }
     constructor(props) {
         super(props)
@@ -76,6 +76,7 @@ class OrderCal extends Component {
 
 
         this.props.dispatch({ type: "clearOrder" })
+        this.props.dispatch(storeStatusOrderCalDrwer(false))
         //this.props.dispatch({type:"RESET_MENU_LIST_AMOUNT"})
         console.log(this.props.menuList);
 
@@ -105,15 +106,17 @@ class OrderCal extends Component {
                                         <ListItemSecondaryAction>
                                             <Typography variant="h6">
                                                 <Button color="primary" onClick={(e) => {
-                                                    shoppingCart.arr[i].amount++
-                                                    this.props.dispatch({ type: "addAmount", "i": i, "arr": shoppingCart.arr[i] })
+                                                    cur.amount++
+                                                    this.props.dispatch({ type: "addAmount", "i": i, "data": cur })
                                                 }}>
                                                     +
                                                 </Button>
                                                 <Chip label={cur.amount} variant="outlined"></Chip>
                                                 <Button color="secondary" onClick={(e) => {
-                                                    shoppingCart.arr[i].amount--
-                                                    this.props.dispatch({ type: "addAmount", "i": i, "arr": shoppingCart.arr[i] })
+                                                    cur.amount--
+                                                    this.props.dispatch({ type: "addAmount", "i": i, "data": cur })
+                                                    if(shoppingCart.arr.length === 0)
+                                                        this.props.dispatch(storeStatusOrderCalDrwer(false))
                                                 }}>
                                                     -
                                                 </Button>

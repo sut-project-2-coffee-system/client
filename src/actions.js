@@ -96,9 +96,23 @@ const sortByEarliestDebutDate = (nbaPlayers) => {
       return new Date(a.time) - new Date(b.time);
     });
   }
-export const storeShoppingCart = (menuSelectList = []) => (
+export const storeShoppingCart = (data = {}) => (
     {
         type: 'orderInOrderList', 
-        menuSelectList
+        data
     }
 )
+export const storeStatusOrderCalDrwer = (data = false) =>{
+    if(data === true){
+        return {
+            type: 'openOrderCal', 
+            data
+        }
+    }
+    else{
+        return {
+            type: 'closeOrderCal', 
+            data
+        }
+    }
+}

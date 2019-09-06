@@ -28,8 +28,9 @@ import Member from '../../pages/member/Member'
 import './Appbar.css'
 import Cashier from '../../pages/cashier/Cashier';
 import History from '../../pages/history/History'
+import Menu from '../../pages/menu/Menu'
 import HistoryIcon from '@material-ui/icons/History'
-
+import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -162,8 +163,12 @@ function MiniDrawer({sideBarName,dispatch}) {
                         <ListItemText primary="cashier" ></ListItemText>
                     </ListItem>
                     <ListItem component={Link} to="/order">
-                        <ListItemIcon><RestaurantMenuIcon style={{fontSize: 40}}/></ListItemIcon>
+                        <ListItemIcon><Filter9PlusIcon style={{fontSize: 40}}/></ListItemIcon>
                         <ListItemText primary="order" ></ListItemText>
+                    </ListItem>
+                    <ListItem component={Link} to="/menu">
+                        <ListItemIcon><RestaurantMenuIcon style={{fontSize: 40}}/></ListItemIcon>
+                        <ListItemText primary="menu" ></ListItemText>
                     </ListItem>
                     <ListItem component={Link} to="/member">
                         <ListItemIcon><PeopleIcon style={{fontSize: 40}}/></ListItemIcon>
@@ -182,6 +187,7 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <Route exact path="/" render={() => <Redirect to="/home" />} />
                     <Route exact path="/Order"  render={(props) => <OrderMain {...props} title={"Order Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Member" render={(props) => <Member {...props} title={"Member Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/menu" render={(props) => <Menu {...props} title={"Menu Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Cashier" render={(props) => <Cashier {...props} title={"Cashier Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/history" render={(props) => <History {...props} title={"History Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/faq" component={() => "FAQ"} />

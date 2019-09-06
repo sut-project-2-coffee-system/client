@@ -47,7 +47,7 @@ let rows = [
 
 let invoiceSubtotal = subtotal(rows);
 let invoiceTaxes = TAX_RATE * invoiceSubtotal;
-let invoiceTotal = invoiceTaxes + invoiceSubtotal;
+// let invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 function OrderTable(props) {
   const classes = useStyles();
@@ -64,7 +64,7 @@ function OrderTable(props) {
       
       invoiceSubtotal = subtotal(rows);
       invoiceTaxes = TAX_RATE * invoiceSubtotal;
-      invoiceTotal = invoiceTaxes + invoiceSubtotal;
+      // invoiceTotal = invoiceTaxes + invoiceSubtotal;
   }
 
   if(props.menu && Object.keys(props.menuList).length > 0){
@@ -95,8 +95,6 @@ function OrderTable(props) {
           ))}
           <TableRow>
             <TableCell rowSpan={3} />
-            <TableCell colSpan={3}>Subtotal</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Tax</TableCell>
@@ -105,7 +103,7 @@ function OrderTable(props) {
           </TableRow>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

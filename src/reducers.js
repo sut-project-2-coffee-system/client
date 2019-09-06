@@ -69,6 +69,14 @@ function menuList(state = [], action) {
     }
 }
 
+function promotionList(state = [], action) {
+    switch (action.type) {
+        case 'promotionList':
+            return action.payload
+        default:
+            return state
+    }
+}
 
 const initstate = {
     arr: []
@@ -169,6 +177,7 @@ const reducers = combineReducers({
     testList: testList,
     shoppingCart: shoppingCart,
     handleDrawerOrderCal:handleDrawerOrderCal,
+    promotionList: promotionList
     // menuInOrder: menuInOrder
 })
 

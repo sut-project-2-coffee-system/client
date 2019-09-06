@@ -12,7 +12,13 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { connect } from 'react-redux'
-import { storeStatusOrderCalDrwer } from '../../actions'
+import { storeStatusOrderCalDrwer, loadPromotion } from '../../actions'
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from '@material-ui/core/TextField';
+
+
 let order = {
     "orderBy": "",
     "orderKeyList": [],
@@ -35,13 +41,17 @@ class OrderCal extends Component {
 
     componentDidMount() {
         //this.props.dispatch(storeShoppingCart())
+        this.props.dispatch(loadPromotion())
     }
     constructor(props) {
         super(props)
 
         this.state = {
             order: [],
-
+            check: false,
+            discountCheck: false,
+            discount: 0,
+            percent: 0,
             orderTotal: 0
         }
     }
@@ -50,8 +60,21 @@ class OrderCal extends Component {
         this.props.shoppingCart.arr.forEach((cur, i) => {
             total = (Number(cur.price) * Number(cur.amount)) + total
         })
-        return total
+        return total - (total * this.state.percent / 100).toFixed(2) - this.state.discount
     }
+
+    handleChangePercentDiscount = (event) => {
+        this.setState({
+            percent: event.target.value
+        })
+    }
+
+    handleChangeDiscount = (event) => {
+        this.setState({
+            discount: event.target.value
+        })
+    }
+
     handleClick = () => {
         order.orderBy = "Unknow"
         order.timestamp = Date.now()
@@ -115,7 +138,7 @@ class OrderCal extends Component {
                                                 <Button color="secondary" onClick={(e) => {
                                                     cur.amount--
                                                     this.props.dispatch({ type: "addAmount", "i": i, "data": cur })
-                                                    if(shoppingCart.arr.length === 0)
+                                                    if (shoppingCart.arr.length === 0)
                                                         this.props.dispatch(storeStatusOrderCalDrwer(false))
                                                 }}>
                                                     -
@@ -132,6 +155,36 @@ class OrderCal extends Component {
                     <Typography variant="h6">
                         ราคารวม {this.calTotal()}
                     </Typography>
+                    <FormGroup row>
+                        <FormControlLabel label="ส่วนลด(เปอร์เซ็น)" labelPlacement="top"
+                            control={
+                                <Switch
+                                    checked={this.state.check}
+                                    onChange={() => { this.setState((prevState) => ({ check: !prevState.check })) }}
+                                    value={this.state.check}
+                                    size="medium"
+                                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                    color="primary" />} />
+                    
+                    <FormControlLabel label="ส่วนลด(บาท)" labelPlacement="top" 
+                                control={
+                                    <Switch
+                                        checked={this.state.discountCheck}
+                                        onChange={() => { this.setState((prevState) => ({ discountCheck: !prevState.discountCheck })) }}
+                                        value={this.state.discountCheck}
+                                        size="medium"
+                                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                        color="primary" />} />
+                    </FormGroup>
+                    {this.state.check === true &&
+                        <TextField id="outlined-full-width" type="number" min={0} label="เปอร์เซ็นส่วนลด" style={{ margin: 5 }} placeholder="เปอร์เซ็นส่วนลด เช่น 20" onChange={this.handleChangePercentDiscount}
+                            fullWidth margin="normal" variant="outlined"
+                            inputProps={{ min: "0", max: "100", step: "1" }} />}
+                    <br></br>
+                    {this.state.discountCheck === true &&
+                        <TextField id="outlined-full-width" type="number" label="ส่วนลดเป็นบาท" style={{ margin: 5 }} placeholder="ส่วนลด(บาท) เช่น 20" onChange={this.handleChangeDiscount}
+                            fullWidth margin="normal" variant="outlined"
+                            inputProps={{ min: "0", max: "100", step: "1" }} />}
                     <Button fullWidth variant="outlined" size="medium" color="primary" onClick={this.handleClick}>
                         Add to Order
                     </Button>
@@ -144,7 +197,9 @@ class OrderCal extends Component {
 function mapStatetoProps(state) {
     return {
         shoppingCart: state.shoppingCart,
-        menuList: state.menuList
+        menuList: state.menuList,
+        promotionList: state.promotionList
     }
 }
+
 export default connect(mapStatetoProps)(OrderCal)

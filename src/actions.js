@@ -91,6 +91,30 @@ export const loadmenu = () => {
     }
 }
 
+export const loadPromotion = () => {
+    return (dispatch) => {
+        const itemsRef = firebase.database().ref('promotion');
+        itemsRef.on('value', function (snapshot) {
+            let items = snapshot.val();
+            let newitem = [];
+            let index = -1;
+            for (let item in items) {
+                index++
+                newitem.push({
+                    key: item,
+                    title: items[item].title,
+                    value: items[item].value,
+                    no: index,
+                })
+            }
+            dispatch({
+                type: 'promotionList',
+                payload: newitem
+            })
+        })
+    }
+}
+
 const sortByEarliestDebutDate = (nbaPlayers) => {
     return nbaPlayers.sort(function(a, b){
       return new Date(a.time) - new Date(b.time);

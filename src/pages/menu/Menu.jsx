@@ -17,7 +17,7 @@ function Menu(props) {
 
     useEffect(() => {
         props.dispatch(loadmenu())
-    }, []);
+    }, [props]);
 
     const [dialogEdit, setDialogEdit] = useState(false);
     const [dialogAdd, setDialogAdd] = useState(false);

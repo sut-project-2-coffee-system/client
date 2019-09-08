@@ -31,6 +31,8 @@ import History from '../../pages/history/History'
 import Menu from '../../pages/menu/Menu'
 import HistoryIcon from '@material-ui/icons/History'
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
+import PromotionIcon from '@material-ui/icons/EventAvailableOutlined';
+import Promotion from '../../pages/promotion/Promotion'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -174,7 +176,11 @@ function MiniDrawer({sideBarName,dispatch}) {
                         <ListItemIcon><PeopleIcon style={{fontSize: 40}}/></ListItemIcon>
                         <ListItemText primary="member" ></ListItemText>
                     </ListItem>
-                     <ListItem component={Link} to="/history">
+                    <ListItem component={Link} to="/promotion">
+                        <ListItemIcon><PromotionIcon style={{fontSize: 40}}/></ListItemIcon>
+                     <ListItemText primary="promotion" ></ListItemText>
+                    </ListItem>
+                    <ListItem component={Link} to="/history">
                         <ListItemIcon><HistoryIcon style={{fontSize: 40}}/></ListItemIcon>
                      <ListItemText primary="history" ></ListItemText>
                     </ListItem>
@@ -190,7 +196,7 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <Route exact path="/menu" render={(props) => <Menu {...props} title={"Menu Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/Cashier" render={(props) => <Cashier {...props} title={"Cashier Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/history" render={(props) => <History {...props} title={"History Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
-                    <Route exact path="/faq" component={() => "FAQ"} />
+                    <Route exact path="/promotion" render={(props) => <Promotion {...props} title={"Promotion Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/contact" component={() => "Contact"} />
                     <Route exact path="/Home-1" component={() => "Home-1"} />
                     <Route exact path="/Home-2" component={() => "Home-2"} />

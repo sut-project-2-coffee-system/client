@@ -10,6 +10,7 @@ import { loadOrderByStatus, loadmenu } from '../../../actions'
 import OrderList from './OrderListWait'
 import OrderCard from './OrderCard'
 import OrderTable from '../OrderTable'
+
 const styles = {
     root: {
         flexGrow: 1,

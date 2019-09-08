@@ -25,6 +25,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const data = {
+    typeName: '',
+    discount: '',
+    fullBuy: '',
+    startDate: new Date(),
+    endDate: new Date()
+}
 
 function Promotion(props) {
     const classes = useStyles();
@@ -71,6 +78,7 @@ function Promotion(props) {
                 startDate: values.startDate.getTime(),
                 endDate: values.endDate.getTime()
             })
+            setValues(data)
         }  
     }
     

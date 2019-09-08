@@ -36,11 +36,7 @@ function Menu(props) {
 
     function handleClickAdd() {
         setDialogAdd(true)
-        setNewMenu({
-        "name": "",
-        "price": "",
-        "image": "",
-        })
+
     }
 
     function handleCloseEdit() {
@@ -67,7 +63,12 @@ function Menu(props) {
 
     function AddMenu() {
         firebase.database().ref('menu').push(newMenu);
-        setDialogEdit(false);
+        setDialogAdd(false);
+        setNewMenu({
+            "name": "",
+            "price": "",
+            "image": "",
+        })
     }
 
     const handleChangeEdit = key => event => {

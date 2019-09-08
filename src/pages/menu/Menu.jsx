@@ -34,6 +34,15 @@ function Menu(props) {
         setDialogEdit(true)
     }
 
+    function handleClickAdd() {
+        setDialogAdd(true)
+        setNewMenu({
+        "name": "",
+        "price": "",
+        "image": "",
+        })
+    }
+
     function handleCloseEdit() {
         setDialogEdit(false);
     }
@@ -176,7 +185,7 @@ function Menu(props) {
                 </DialogActions>
             </Dialog>
             <Fab aria-label='Add' style={{ position: 'fixed', bottom: 25, right: 25, }} color='primary'>
-                <AddIcon onClick={() => setDialogAdd(true)} />
+                <AddIcon onClick={handleClickAdd} />
             </Fab>
         </div>
     );

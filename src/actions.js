@@ -1,4 +1,3 @@
-
 import firebase from './Firebase'
 
 // export const loadOrder = () => {

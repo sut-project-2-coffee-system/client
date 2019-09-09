@@ -16,7 +16,11 @@ import { storeStatusOrderCalDrwer, loadPromotion } from '../../actions'
 import Switch from '@material-ui/core/Switch';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 
 let order = {
@@ -48,32 +52,53 @@ class OrderCal extends Component {
 
         this.state = {
             order: [],
-            check: false,
-            discountCheck: false,
+            check: false, //percent
+            discountCheck: false, //baht
             discount: 0,
             percent: 0,
-            orderTotal: 0
+            orderTotal: 0,
+            discountBaht: 0,
+            discountPercent: 0
         }
     }
     calTotal = () => {
         let total = 0
+        let discountBaht = 0
+        let discountPercent= 0
         this.props.shoppingCart.arr.forEach((cur, i) => {
             total = (Number(cur.price) * Number(cur.amount)) + total
         })
-        return total - (total * this.state.percent / 100).toFixed(2) - this.state.discount
+        if(this.state.check && total >= this.state.discountPercent.buyTarget)
+            discountPercent = this.state.discountPercent.discount
+        else
+            discountPercent = 0
+        if(this.state.discountCheck && total >= this.state.discountBaht.buyTarget)
+            discountBaht = this.state.discountBaht.discount
+        else
+            discountBaht = 0
+        if(discountPercent === 0)
+            return total - discountBaht
+        else if(discountPercent !== 0) 
+            return total - (total * discountPercent / 100).toFixed(2) - discountBaht
     }
 
-    handleChangePercentDiscount = (event) => {
-        this.setState({
-            percent: event.target.value
-        })
-    }
+    // handleChangePercentDiscount = (event) => {
+    //     this.setState({
+    //         percent: event.target.value
+    //     })
+    // }
 
-    handleChangeDiscount = (event) => {
+    // handleChangeDiscount = (event) => {
+    //     this.setState({
+    //         discount: event.target.value
+    //     })
+    // }
+
+    handleChange = (event) => {
         this.setState({
-            discount: event.target.value
+            [event.target.name]: event.target.value
         })
-    }
+      }
 
     handleClick = () => {
         order.orderBy = "Unknow"
@@ -106,7 +131,7 @@ class OrderCal extends Component {
     }
     render() {
         let date = new Date();
-        let { shoppingCart } = this.props
+        let { shoppingCart,promotionList } = this.props
         if (shoppingCart.arr === undefined || null)
             return null
         return (
@@ -177,14 +202,39 @@ class OrderCal extends Component {
                                         color="primary" />} />
                     </FormGroup>
                     {this.state.check === true &&
-                        <TextField id="outlined-full-width" type="number" min={0} label="เปอร์เซ็นส่วนลด" style={{ margin: 5 }} placeholder="เปอร์เซ็นส่วนลด เช่น 20" onChange={this.handleChangePercentDiscount}
-                            fullWidth margin="normal" variant="outlined"
-                            inputProps={{ min: "0", max: "100", step: "1" }} />}
+                        <FormControl style={{margin: 1,width: '100%',}}>
+                        <InputLabel htmlFor="age-simple">โปรโมชั่นลดเป็นเปอร์เซ็น</InputLabel>
+                        <Select
+                        value={this.state.discountPercent}
+                        onChange={this.handleChange}
+                        inputProps={{
+                            name: 'discountPercent',
+                            id: 'age-simple',
+                        }}
+                        >
+                        {promotionList.itemPercent.map((item,index)=> {
+                            return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} เปอร์เซ็น</MenuItem>
+                        })}
+                        </Select>
+                    </FormControl>}
                     <br></br>
                     {this.state.discountCheck === true &&
-                        <TextField id="outlined-full-width" type="number" label="ส่วนลดเป็นบาท" style={{ margin: 5 }} placeholder="ส่วนลด(บาท) เช่น 20" onChange={this.handleChangeDiscount}
-                            fullWidth margin="normal" variant="outlined"
-                            inputProps={{ min: "0", max: "100", step: "1" }} />}
+                        <FormControl style={{margin: 1,width: '100%',}}>
+                            <InputLabel htmlFor="age-simple">โปรโมชั่นลดเป็นบาท</InputLabel>
+                            <Select
+                            value={this.state.discountBaht}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'discountBaht',
+                                id: 'age-simple',
+                            }}
+                            >
+                            {promotionList.itemBaht.map((item,index)=> {
+                                return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} บาท</MenuItem>
+                            })}
+                            </Select>
+                        </FormControl>
+                    }
                     <Button fullWidth variant="outlined" size="medium" color="primary" onClick={this.handleClick}>
                         Add to Order
                     </Button>
@@ -203,3 +253,14 @@ function mapStatetoProps(state) {
 }
 
 export default connect(mapStatetoProps)(OrderCal)
+
+
+// {this.state.check === true &&
+//     <TextField id="outlined-full-width" type="number" min={0} label="เปอร์เซ็นส่วนลด" style={{ margin: 5 }} placeholder="เปอร์เซ็นส่วนลด เช่น 20" onChange={this.handleChangePercentDiscount}
+//         fullWidth margin="normal" variant="outlined"
+//         inputProps={{ min: "0", max: "100", step: "1" }} />}
+// <br></br>
+// {this.state.discountCheck === true &&
+//     <TextField id="outlined-full-width" type="number" label="ส่วนลดเป็นบาท" style={{ margin: 5 }} placeholder="ส่วนลด(บาท) เช่น 20" onChange={this.handleChangeDiscount}
+//         fullWidth margin="normal" variant="outlined"
+//         inputProps={{ min: "0", max: "100", step: "1" }} />}

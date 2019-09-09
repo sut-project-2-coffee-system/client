@@ -69,7 +69,7 @@ function menuList(state = [], action) {
     }
 }
 
-function promotionList(state = [], action) {
+function promotionList(state = {}, action) {
     switch (action.type) {
         case 'promotionList':
             return action.payload

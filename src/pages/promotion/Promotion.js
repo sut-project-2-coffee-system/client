@@ -25,6 +25,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const data = {
+    typeName: '',
+    discount: '',
+    fullBuy: '',
+    startDate: new Date(),
+    endDate: new Date()
+}
 
 function Promotion(props) {
     const classes = useStyles();
@@ -60,17 +67,13 @@ function Promotion(props) {
     function handleSubmit(event){
         event.preventDefault();
         if (values.typeName !== '') {
-            let str = ''
-            if(values.typeName === 'ลดเป็นบาท')
-                str = 'ซื้อครบ '+ values.fullBuy + ' บาท ลด ' + values.discount + ' บาท'
-            else
-                str = 'ซื้อครบ '+ values.fullBuy + ' บาท ลด ' + values.discount + ' เปอร์เซ็น'
             firebase.database().ref('promotion').child(values.typeName).push().set({
-                name: str,
+                fullBuy: values.fullBuy,
                 value: values.discount,
                 startDate: values.startDate.getTime(),
                 endDate: values.endDate.getTime()
             })
+            setValues(data)
         }  
     }
     
@@ -142,9 +145,8 @@ function Promotion(props) {
                         </Typography>
                      </Grid>
                      <Grid item xs={2}>
-                         <br />
                         <Typography color="textPrimary" variant="h6" >
-                            จาก (Start Date):
+                            Start Date:
                         </Typography>
                      </Grid>
                      <Grid item xs={4}>
@@ -156,9 +158,8 @@ function Promotion(props) {
                         </MuiPickersUtilsProvider>
                      </Grid>
                      <Grid item xs={2} >
-                         <br />
                         <Typography color="textPrimary" variant="h6">
-                            ถึง (End Date):
+                            End Date:
                         </Typography>
                      </Grid>
                      <Grid item xs={4}>
@@ -167,7 +168,7 @@ function Promotion(props) {
                             <KeyboardDatePicker margin="normal" id="date-picker-dialog"  label="End Date" format="dd/MM/yyyy" value={values.endDate} onChange={handleEndDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
-                                                }} minDate={new Date()} style={{width: '100%'}}/>
+                                                }}  style={{width: '100%'}}/>
                         </MuiPickersUtilsProvider>
                         </Typography>
                      </Grid>

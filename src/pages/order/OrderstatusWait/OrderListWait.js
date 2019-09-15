@@ -27,7 +27,7 @@ class OrderList extends Component {
             <div>
                 {orders.map((item,index) => {
                     return (    
-                            <ListItem key={item.index} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(index)}>
+                            <ListItem key={index} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(index)}>
                                 <ListItemAvatar>
                                     <Avatar alt="Remy Sharp" src={item.userImage} />
                                 </ListItemAvatar>

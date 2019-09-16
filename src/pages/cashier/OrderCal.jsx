@@ -47,6 +47,9 @@ class OrderCal extends Component {
         //this.props.dispatch(storeShoppingCart())
         this.props.dispatch(loadPromotion())
     }
+    componentWillUnmount(){
+        this.props.dispatch({type:"clearOrder"})
+    }
     constructor(props) {
         super(props)
 

@@ -8,7 +8,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import firebase from '../../Firebase'
-
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles({
   card: {
@@ -33,7 +33,11 @@ const SignIn = (props) => {
   }
   const handleSubmit = (event) =>{
     event.preventDefault();
-    firebase.auth().signInWithEmailAndPassword(myform.email, myform.password).then((u) => {
+    firebase.auth().signInWithEmailAndPassword(myform.email, myform.password).then((user) => {
+      props.dispatch({
+        type: 'signIn',
+        payload: user
+      })
       props.history.push('/')
     }).catch((error) => {
       alert(error.message)
@@ -83,4 +87,11 @@ const SignIn = (props) => {
     </div>
   )
 }
-export default SignIn;
+
+function mapStatetoProps(state) {
+  return {
+    user: state.user,
+  }
+}
+
+export default connect(mapStatetoProps)(SignIn);

@@ -26,7 +26,7 @@ class OrderList extends Component {
             <div>
                 {orders.map((item,index) => {
                     return (    
-                            <ListItem key={item.index} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(item,index)}>
+                            <ListItem key={index} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(item,index)}>
                                 <ListItemAvatar>
                                     <Avatar alt="Remy Sharp" src={item.userImage} />
                                 </ListItemAvatar>
@@ -40,7 +40,7 @@ class OrderList extends Component {
                                                 className={classes.inline}
                                                 color="textPrimary">
                                                 สั่งโดยคุณ : {item.orderBy}<br />
-                                                เบอร์ติดต่อ : {item.tel}<br />
+                                                {/* เบอร์ติดต่อ : {item.tel}<br /> */}
                                                 จำนวน : {Object.keys(item.orderList).length} รายการ
                                             </Typography>
                                         </React.Fragment>

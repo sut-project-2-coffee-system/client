@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Route,Switch } from 'react-router-dom'
-import  Home  from './pages/Home'
 import { createStore,applyMiddleware } from 'redux'
 import reducers from './reducers'
 import {Provider} from 'react-redux'
@@ -14,20 +12,11 @@ import logger from 'redux-logger'
 
 const store = createStore(reducers,applyMiddleware(thunk,logger))
 
-const HomeContainer = () => (
-    <div className="container">
-      <Route exact path="/" component={Home} />
-      <Route path="/home" component={Home} />
-    </div>
-)
 
 ReactDOM.render(
     <Provider store={store}>
         <Router >
-            <Switch>
-                    <Route path="/home" component={HomeContainer} />
-                    <Route component={App} />
-            </Switch>
+            <App />
         </Router>
     </Provider>
 

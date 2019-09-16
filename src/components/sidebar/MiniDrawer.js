@@ -17,8 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Switch, Route } from 'react-router-dom';
 import OrderMain from '../../pages/order/OrderMain';
-import { Redirect } from 'react-router-dom'
-import { Link } from 'react-router-dom';
+import { Redirect,withRouter,Link } from 'react-router-dom'
 import PeopleIcon from '@material-ui/icons/PeopleOutlineRounded';
 import HomeIcon from '@material-ui/icons/HomeSharp'
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenuRounded'
@@ -33,6 +32,14 @@ import HistoryIcon from '@material-ui/icons/History'
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
 import PromotionIcon from '@material-ui/icons/EventAvailableOutlined';
 import Promotion from '../../pages/promotion/Promotion'
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+import createOverrides from '../../theme';
+import Button from '@material-ui/core/Button';
+import firebase from '../../Firebase'
+
+const baseTheme = createMuiTheme();
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -96,7 +103,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function MiniDrawer({sideBarName,dispatch}) {
+function MiniDrawer({sideBarName,dispatch,props}) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -109,8 +116,22 @@ function MiniDrawer({sideBarName,dispatch}) {
         setOpen(false);
     }
 
+    function signOut(e){
+        e.preventDefault()
+        firebase.auth().signOut().then(function() {
+        }).catch(function(error) {
+            console.log(error.message)
+        });
+    }
+
     return (
+        <ThemeProvider
+        theme={{
+          ...baseTheme,
+          overrides: createOverrides(baseTheme)
+        }}>
         <div className={classes.root}>
+        
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -133,6 +154,9 @@ function MiniDrawer({sideBarName,dispatch}) {
                     <Typography variant="h6" noWrap>
                         {sideBarName}
           </Typography>
+          <Button variant="outlined" size="medium" color="primary" onClick={signOut} style={{marginLeft: 'auto'}}>
+                                    LOGOUT
+                                </Button>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -210,6 +234,7 @@ function MiniDrawer({sideBarName,dispatch}) {
                 </Switch>
             </main>
         </div>
+        </ThemeProvider>
     );
 }
 
@@ -220,4 +245,4 @@ function mapStatetoProps(state) {
     }
 }
 
-export default connect(mapStatetoProps)(MiniDrawer)
+export default withRouter(connect(mapStatetoProps)(MiniDrawer))

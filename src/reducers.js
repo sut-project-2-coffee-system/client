@@ -152,6 +152,17 @@ function totalPrice(state = 0, action) {
     }
 }
 
+function userLogin(state = null, action) {
+    switch (action.type) {
+        case 'signIn':
+            return action.payload
+        case 'signOut':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 function handleDrawerOrderCal(state = false, action) {
     switch (action.type) {
         case "openOrderCal":
@@ -177,7 +188,8 @@ const reducers = combineReducers({
     testList: testList,
     shoppingCart: shoppingCart,
     handleDrawerOrderCal:handleDrawerOrderCal,
-    promotionList: promotionList
+    promotionList: promotionList,
+    user: userLogin,
     // menuInOrder: menuInOrder
 })
 

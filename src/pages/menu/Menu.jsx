@@ -17,6 +17,7 @@ function Menu(props) {
 
     useEffect(() => {
         props.dispatch(loadmenu())
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -28,6 +29,37 @@ function Menu(props) {
         "price": "",
         "image": "",
     });
+    const [uploadValue, setUploadValue] = useState(0)
+    const [messag, setMessag] = useState("")
+
+    function handleChangeUpload(event) {
+        let file = event.target.files
+        const fileUpload = file[0];
+        const storageRef = firebase.storage().ref(`menuImage/${file[0].name}`);
+        const task = storageRef.put(fileUpload)
+
+        task.on(`state_changed`, (snapshort) => {
+            //console.log(snapshort.bytesTransferred, snapshort.totalBytes)
+            let percentage = (snapshort.bytesTransferred / snapshort.totalBytes) * 100;
+            //Process
+            setUploadValue(percentage)
+            console.log(percentage);
+
+        }, (error) => {
+            //Error
+            setMessag(`Upload error : ${error.message}`)
+        }, () => {
+            //Success
+            setMessag(`Upload Success`)
+            task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                console.log('File available at', downloadURL);
+                setNewMenu({...newMenu, image:downloadURL})
+                setCurMenu({...curMenu, image:downloadURL})
+            });
+
+
+        })
+    }
 
     function handleClickEdit(cur) {
         setCurMenu(cur)
@@ -77,7 +109,9 @@ function Menu(props) {
 
     const handleChangeAdd = key => event => {
         setNewMenu({ ...newMenu, [key]: event.target.value });
+        //console.log(newMenu);
     };
+
 
     return (
         <div style={{ flexGrow: 1 }}>
@@ -127,6 +161,12 @@ function Menu(props) {
                         value={curMenu.image}
                         fullWidth
                     />
+                    <input
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => handleChangeUpload(e)}
+                    />
+                    {(uploadValue > 0 && uploadValue <100) && (<span>{uploadValue}%</span> )} {uploadValue === 100 && (<span>{messag}</span>)}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseEdit} color="primary">
@@ -139,6 +179,7 @@ function Menu(props) {
                         Edit
                     </Button>
                 </DialogActions>
+                
             </Dialog>
             <Dialog
                 open={dialogAdd}
@@ -151,8 +192,8 @@ function Menu(props) {
                         autoFocus
                         label="Manu Name"
                         type="text"
+                        value = {newMenu.name}
                         onChange={handleChangeAdd('name')}
-                        value={newMenu.name}
                         fullWidth
                     />
                     <TextField
@@ -161,20 +202,27 @@ function Menu(props) {
                         id="menuPrice"
                         label="Manu Price"
                         type="number"
+                        value = {newMenu.price}
                         onChange={handleChangeAdd('price')}
-                        value={newMenu.price}
                         fullWidth
                     />
-                    <TextField
+                     <TextField
+                        name="newMenu"
                         autoFocus
                         margin="dense"
                         id="menuImage"
                         label="Manu Image"
                         type="text"
+                        value = {newMenu.image}
                         onChange={handleChangeAdd('image')}
-                        value={newMenu.image}
                         fullWidth
+                    /> 
+                    <input
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => handleChangeUpload(e)}
                     />
+                    {(uploadValue > 0 && uploadValue <100) && (<span>{uploadValue}%</span> )} {uploadValue === 100 && (<span>{messag}</span>)}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseAdd} color="primary">

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MaterialTable from 'material-table';
 import { connect } from 'react-redux'
 // import firebase from '../../Firebase'
-import { loadOrderByStatus, loadmenu } from '../../actions'
+import { loadOrderByStatus, loadmenu,loadMember } from '../../actions'
 import OrderTable from '../order/OrderTable'
 import FullScreenDialog from './Dialog'
 
@@ -17,11 +17,22 @@ class History extends Component {
   componentDidMount() {
     this.props.dispatch(loadOrderByStatus('done', 'loadOrderByStatusDone'))
     this.props.dispatch(loadmenu())
+    this.props.dispatch(loadMember())
+  }
+
+  findIndex(item){
+    let indexData = 0
+    if (this.props.memberList !== undefined && item !== undefined) {
+        this.props.memberList.find((cur, i) => {
+            if (cur.key === item.lineProfile)
+                indexData = i
+            return cur.key === item.lineProfile
+        })
+        return this.props.memberList[indexData]
+    }
   }
   render() {
     const { OrderByStatusDone, menuList } = this.props
-    if (!OrderByStatusDone)
-      return <h1> loading </h1>
     return (
       <div>
         <MaterialTable
@@ -30,13 +41,16 @@ class History extends Component {
             {
               title: 'Avatar',
               field: 'avatar',
-              render: rowData => (
-                <img
-                  style={{ height: 36, borderRadius: '50%' }}
-                  alt="User propfile"
-                  src={rowData.userImage}
-                />
-              ),
+              render: rowData => {
+                let member = this.findIndex(rowData)
+                if(member !== undefined)
+                return (
+                  <img
+                    style={{ height: 36, borderRadius: '50%' }}
+                    alt="User propfile"
+                    src={member.pictureUrl}
+                  />
+                )},
             },
             { title: 'Name', field: 'orderBy' },
             { title: 'เบอร์โทรศํพท์', field: 'tel' },
@@ -89,7 +103,8 @@ class History extends Component {
 function mapStatetoProps(state) {
   return {
     OrderByStatusDone: state.OrderByStatusDone,
-    menuList: state.menuList
+    menuList: state.menuList,
+    memberList: state.memberList
   }
 }
 

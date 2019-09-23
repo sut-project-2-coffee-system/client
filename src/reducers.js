@@ -69,6 +69,15 @@ function menuList(state = [], action) {
     }
 }
 
+function memberList(state = [],action){
+    switch(action.type){
+        case 'memberList':
+            return action.payload
+        default:
+            return state
+    }
+}
+
 function promotionList(state = {}, action) {
     switch (action.type) {
         case 'promotionList':
@@ -190,6 +199,7 @@ const reducers = combineReducers({
     handleDrawerOrderCal:handleDrawerOrderCal,
     promotionList: promotionList,
     user: userLogin,
+    memberList: memberList
     // menuInOrder: menuInOrder
 })
 

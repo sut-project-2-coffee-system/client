@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-async function handleClick(order) {
+async function handleClick(order,member) {
   let orderTarget
   firebase.database().ref(`order/${order.key}`).on('value', function (snapshot) {
     orderTarget=snapshot.val()
@@ -42,7 +42,7 @@ async function handleClick(order) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      userId: order.userId,
+      userId: member.userId,
       messages: msg
     })
   }).then(res => {
@@ -53,16 +53,28 @@ async function handleClick(order) {
 }
 
 export default function OrderCard(props) {
-  const classes = useStyles();
 
-  if (!props.orderselect)
-    return ''
-  
+  const findIndex = (item) =>{
+    let indexData = 0
+    if (props.memberList !== undefined && item !== undefined) {
+        props.memberList.find((cur, i) => {
+            if (cur.key === item.lineProfile)
+                indexData = i
+            return cur.key === item.lineProfile
+        })
+        return props.memberList[indexData]
+    }
+  }
+
+  const classes = useStyles();
+  let member = findIndex(props.orderselect)
+
   return (
     <Card className={classes.root}>
+      {member !== undefined &&
       <Grid container >
         <Grid item xs={2}>
-          <Avatar alt="Remy Sharp" src={props.orderselect.userImage} className={classes.bigAvatar} />
+          <Avatar alt="Remy Sharp" src={member.pictureUrl} className={classes.bigAvatar} />
         </Grid>
         <Grid item xs={10}>
           <CardContent >
@@ -75,11 +87,12 @@ export default function OrderCard(props) {
           </CardContent>
         </Grid>
         <CardActions align="end" >
-          <Button size="large" color="primary" variant='outlined' onClick={() => handleClick(props.orderselect)}>
+          <Button size="large" color="primary" variant='outlined' onClick={() => handleClick(props.orderselect,member)}>
             กำลังทำ
             </Button>
         </CardActions>
       </Grid>
+    }
     </Card>
   );
 }

@@ -18,6 +18,7 @@ export const loadOrderByStatus = (statusName, type) => {
                     orderBy: items[item].orderBy,
                     status: items[item].status,
                     tel: items[item].tel,
+                    lineProfile: items[item].lineProfile,
                     userImage: items[item].lineProfile.pictureUrl,
                     displayName: items[item].lineProfile.displayName,
                     userId: items[item].lineProfile.userId,
@@ -28,6 +29,28 @@ export const loadOrderByStatus = (statusName, type) => {
             dispatch({
                 type: type,
                 payload: sortByEarliestDebutDate(newitem)
+            })
+        })
+    }
+}
+
+
+export const loadMember = () => {
+    return (dispatch) => {
+        firebase.database().ref('member').on('value', function (snapshot) {
+            let items = snapshot.val();
+            let newitem = [];
+
+            for (let item in items) {
+                newitem.push({
+                    ...items[item],
+                    key: item
+                })
+            }
+
+            dispatch({
+                type: 'memberList',
+                payload: newitem
             })
         })
     }

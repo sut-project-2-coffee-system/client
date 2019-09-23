@@ -20,16 +20,29 @@ class OrderList extends Component {
         // console.log(this.props.orderSelect)
         this.props.onSelectOrder(index)
     }
+    findIndex = (item) =>{
+        let indexData = 0
+        if (this.props.memberList !== undefined) {
+            this.props.memberList.find((cur, i) => {
+                if (cur.key === item.lineProfile)
+                    indexData = i
+                return cur.key === item.lineProfile
+            })
+            return this.props.memberList[indexData]
+        }
+    }
 
     render() {
         const { orders,classes,orderSelect } = this.props
         return (
             <div>
                 {orders.map((item,index) => {
+                        let member = this.findIndex(item)
+                        if(member !== undefined)
                     return (    
                             <ListItem key={index} alignItems="flex-start" divider button   selected={orderSelect === index} onClick={() => this.handleClick(index)}>
                                 <ListItemAvatar>
-                                    <Avatar alt="Remy Sharp" src={item.userImage} />
+                                    <Avatar alt="Remy Sharp" src={member.pictureUrl} />
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={"ออเดอร์ที่: "+ (item.no+1)}
@@ -48,6 +61,7 @@ class OrderList extends Component {
                                     } />
                             </ListItem>
                     );
+                    return ''
                 })}
             </div>
         )

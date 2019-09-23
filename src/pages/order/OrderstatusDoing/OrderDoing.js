@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/styles';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
-import { loadOrderByStatus, loadmenu } from '../../../actions'
+import { loadOrderByStatus, loadmenu,loadMember } from '../../../actions'
 import OrderList from './OrderListDoing'
 import OrderTable from '../OrderTable'
 import OrderCard from './OrderCard'
@@ -53,10 +53,11 @@ class OrderDoing extends Component {
         // this.props.sideBarName(this.props.title)
         this.props.dispatch(loadOrderByStatus('doing','loadOrderByStatusDoing'))
         this.props.dispatch(loadmenu())
+        this.props.dispatch(loadMember())
     }
 
     render() {
-        let { classes, OrderByStatusDoing, dispatch, orderSelectDoing, menuList } = this.props;
+        let { classes, OrderByStatusDoing, dispatch, orderSelectDoing, menuList,memberList } = this.props;
         return (
             <Fragment>
                 <div className={classes.root}>
@@ -64,13 +65,13 @@ class OrderDoing extends Component {
                         <Grid item xs={12} sm={3}>
                             <Paper className={classes.paperleft} >
                                 <List className={classes.root}>
-                                    <OrderList orders={OrderByStatusDoing} orderSelect={orderSelectDoing} onSelectOrder={(item) => dispatch({ type: 'orderSelectDoing', payload: item })}></OrderList>
+                                    <OrderList orders={OrderByStatusDoing} orderSelect={orderSelectDoing} memberList={memberList} onSelectOrder={(item) => dispatch({ type: 'orderSelectDoing', payload: item })}></OrderList>
                                 </List>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} sm={9} >
                             <Paper className={classes.paperright}>
-                                <OrderCard orderselect={OrderByStatusDoing[orderSelectDoing]}></OrderCard>
+                                <OrderCard orderselect={OrderByStatusDoing[orderSelectDoing]} memberList={memberList}></OrderCard>
                                 <OrderTable menuList={menuList} menu={OrderByStatusDoing[orderSelectDoing]} />
                             </Paper>
                         </Grid>
@@ -87,7 +88,8 @@ function mapStatetoProps(state) {
         tabValue: state.tabValue,
         OrderByStatusDoing: state.OrderByStatusDoing,
         orderSelectDoing: state.orderSelectDoing,
-        menuList: state.menuList
+        menuList: state.menuList,
+        memberList: state.memberList
     }
 }
 

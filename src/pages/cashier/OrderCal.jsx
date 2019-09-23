@@ -21,6 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import QrCodeReader from './QrCodeReader'
 
 
 let order = {
@@ -29,16 +30,19 @@ let order = {
     "location1": "",
     "location2": "",
     "tel": "",
-    "lineProfile": {
-        "displayName": "",
-        "pictureUrl": "https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/1.jpg?alt=media&token=57779667-a306-41fc-9504-230b3dbdf811",
-        "statusMessage": "",
-        "userId": ""
-    },
+    "lineProfile": '',
     "pay": "จ่ายแล้ว",
     "timestamp": 0,
     "status": "wait"
 }
+
+// let lineProfile = {
+//     "displayName": "",
+//     "pictureUrl": "https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/1.jpg?alt=media&token=57779667-a306-41fc-9504-230b3dbdf811",
+//     "point": 0,
+//     "statusMessage": "",
+//     "userId": ""
+// }
 
 
 class OrderCal extends Component {
@@ -47,8 +51,8 @@ class OrderCal extends Component {
         //this.props.dispatch(storeShoppingCart())
         this.props.dispatch(loadPromotion())
     }
-    componentWillUnmount(){
-        this.props.dispatch({type:"clearOrder"})
+    componentWillUnmount() {
+        this.props.dispatch({ type: "clearOrder" })
     }
     constructor(props) {
         super(props)
@@ -61,52 +65,47 @@ class OrderCal extends Component {
             percent: 0,
             orderTotal: 0,
             discountBaht: 0,
-            discountPercent: 0
+            discountPercent: 0,
+            lineProfile: {
+                "displayName": "",
+                "pictureUrl": "",
+                "point": 0,
+                "statusMessage": "",
+                "userId": ""
+            },
         }
     }
     calTotal = () => {
         let total = 0
         let discountBaht = 0
-        let discountPercent= 0
+        let discountPercent = 0
         this.props.shoppingCart.arr.forEach((cur, i) => {
             total = (Number(cur.price) * Number(cur.amount)) + total
         })
-        if(this.state.check && total >= this.state.discountPercent.buyTarget)
+        if (this.state.check && total >= this.state.discountPercent.buyTarget)
             discountPercent = this.state.discountPercent.discount
         else
             discountPercent = 0
-        if(this.state.discountCheck && total >= this.state.discountBaht.buyTarget)
+        if (this.state.discountCheck && total >= this.state.discountBaht.buyTarget)
             discountBaht = this.state.discountBaht.discount
         else
             discountBaht = 0
-        if(discountPercent === 0)
+        if (discountPercent === 0)
             return total - discountBaht
-        else if(discountPercent !== 0) 
+        else if (discountPercent !== 0)
             return total - (total * discountPercent / 100).toFixed(2) - discountBaht
     }
-
-    // handleChangePercentDiscount = (event) => {
-    //     this.setState({
-    //         percent: event.target.value
-    //     })
-    // }
-
-    // handleChangeDiscount = (event) => {
-    //     this.setState({
-    //         discount: event.target.value
-    //     })
-    // }
 
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
-      }
+    }
 
     handleClick = () => {
         order.orderBy = "Unknow"
         order.timestamp = Date.now()
-
+        order.total = this.calTotal()
         this.props.shoppingCart.arr.forEach((cur, i) => {
             order.orderKeyList.push(
                 {
@@ -116,11 +115,32 @@ class OrderCal extends Component {
                 }
             )
         })
-        if (order.orderKeyList !== []) {
-            firebase.database().ref("order").push({
-                ...order
+        let lineProfile = this.state.lineProfile
+        if (order.orderKeyList !== [] && lineProfile != null) {
+            console.log(this.state.lineProfile.userId)
+            firebase.database().ref('member').orderByChild('userId').equalTo(lineProfile.userId).once('value', function (snapshot) {
+                if (snapshot.val() === null) {
+                    lineProfile.point = 0
+                    firebase.database().ref("member").push(lineProfile).then((snap) => {
+                        order.lineProfile = snap.key
+                        firebase.database().ref("order").push({
+                            ...order
+                        })
+                        order.orderKeyList = []
+                    })
+                }
+                else{
+                    console.log('Object.keys(snapshot.val())[0]',Object.keys(snapshot.val())[0])
+                    firebase.database().ref('member/').child(Object.keys(snapshot.val())[0]).update({
+                        point : snapshot.val()[Object.keys(snapshot.val())[0]].point + 1
+                    })
+                    order.lineProfile = Object.keys(snapshot.val())[0]
+                    firebase.database().ref("order").push({
+                        ...order
+                    })
+                    order.orderKeyList = []
+                }
             })
-            order.orderKeyList = []
         }
         else
             alert("ไม่สามารถเพิ่มได้")
@@ -128,13 +148,18 @@ class OrderCal extends Component {
 
         this.props.dispatch({ type: "clearOrder" })
         this.props.dispatch(storeStatusOrderCalDrwer(false))
-        //this.props.dispatch({type:"RESET_MENU_LIST_AMOUNT"})
-        console.log(this.props.menuList);
-
     }
+
+    onScanUser = (result) => {
+        let user = JSON.parse(result)
+        this.setState({
+            lineProfile: user
+        })
+    }
+
     render() {
         let date = new Date();
-        let { shoppingCart,promotionList } = this.props
+        let { shoppingCart, promotionList } = this.props
         if (shoppingCart.arr === undefined || null)
             return null
         return (
@@ -193,54 +218,55 @@ class OrderCal extends Component {
                                     size="medium"
                                     inputProps={{ 'aria-label': 'secondary checkbox' }}
                                     color="primary" />} />
-                    
-                    <FormControlLabel label="ส่วนลด(บาท)" labelPlacement="top" 
-                                control={
-                                    <Switch
-                                        checked={this.state.discountCheck}
-                                        onChange={() => { this.setState((prevState) => ({ discountCheck: !prevState.discountCheck })) }}
-                                        value={this.state.discountCheck}
-                                        size="medium"
-                                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                                        color="primary" />} />
+
+                        <FormControlLabel label="ส่วนลด(บาท)" labelPlacement="top"
+                            control={
+                                <Switch
+                                    checked={this.state.discountCheck}
+                                    onChange={() => { this.setState((prevState) => ({ discountCheck: !prevState.discountCheck })) }}
+                                    value={this.state.discountCheck}
+                                    size="medium"
+                                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                    color="primary" />} />
                     </FormGroup>
                     {this.state.check === true &&
-                        <FormControl style={{margin: 1,width: '100%',}}>
-                        <InputLabel htmlFor="age-simple">โปรโมชั่นลดเป็นเปอร์เซ็น</InputLabel>
-                        <Select
-                        value={this.state.discountPercent}
-                        onChange={this.handleChange}
-                        inputProps={{
-                            name: 'discountPercent',
-                            id: 'age-simple',
-                        }}
-                        >
-                        {promotionList.itemPercent.map((item,index)=> {
-                            return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} เปอร์เซ็น</MenuItem>
-                        })}
-                        </Select>
-                    </FormControl>}
+                        <FormControl style={{ margin: 1, width: '100%', }}>
+                            <InputLabel htmlFor="age-simple">โปรโมชั่นลดเป็นเปอร์เซ็น</InputLabel>
+                            <Select
+                                value={this.state.discountPercent}
+                                onChange={this.handleChange}
+                                inputProps={{
+                                    name: 'discountPercent',
+                                    id: 'age-simple',
+                                }}
+                            >
+                                {promotionList.itemPercent.map((item, index) => {
+                                    return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} เปอร์เซ็น</MenuItem>
+                                })}
+                            </Select>
+                        </FormControl>}
                     <br></br>
                     {this.state.discountCheck === true &&
-                        <FormControl style={{margin: 1,width: '100%',}}>
+                        <FormControl style={{ margin: 1, width: '100%', }}>
                             <InputLabel htmlFor="age-simple">โปรโมชั่นลดเป็นบาท</InputLabel>
                             <Select
-                            value={this.state.discountBaht}
-                            onChange={this.handleChange}
-                            inputProps={{
-                                name: 'discountBaht',
-                                id: 'age-simple',
-                            }}
+                                value={this.state.discountBaht}
+                                onChange={this.handleChange}
+                                inputProps={{
+                                    name: 'discountBaht',
+                                    id: 'age-simple',
+                                }}
                             >
-                            {promotionList.itemBaht.map((item,index)=> {
-                                return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} บาท</MenuItem>
-                            })}
+                                {promotionList.itemBaht.map((item, index) => {
+                                    return <MenuItem key={index} value={item}>ซื้อครบ {item.buyTarget} บาท ลด {item.discount} บาท</MenuItem>
+                                })}
                             </Select>
                         </FormControl>
                     }
                     <Button fullWidth variant="outlined" size="medium" color="primary" onClick={this.handleClick}>
                         Add to Order
                     </Button>
+                    <QrCodeReader onScanUser={this.onScanUser} />
                 </Paper>
             </div>
         )
@@ -258,12 +284,3 @@ function mapStatetoProps(state) {
 export default connect(mapStatetoProps)(OrderCal)
 
 
-// {this.state.check === true &&
-//     <TextField id="outlined-full-width" type="number" min={0} label="เปอร์เซ็นส่วนลด" style={{ margin: 5 }} placeholder="เปอร์เซ็นส่วนลด เช่น 20" onChange={this.handleChangePercentDiscount}
-//         fullWidth margin="normal" variant="outlined"
-//         inputProps={{ min: "0", max: "100", step: "1" }} />}
-// <br></br>
-// {this.state.discountCheck === true &&
-//     <TextField id="outlined-full-width" type="number" label="ส่วนลดเป็นบาท" style={{ margin: 5 }} placeholder="ส่วนลด(บาท) เช่น 20" onChange={this.handleChangeDiscount}
-//         fullWidth margin="normal" variant="outlined"
-//         inputProps={{ min: "0", max: "100", step: "1" }} />}

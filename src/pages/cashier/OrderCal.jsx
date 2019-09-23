@@ -36,14 +36,6 @@ let order = {
     "status": "wait"
 }
 
-// let lineProfile = {
-//     "displayName": "",
-//     "pictureUrl": "https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/1.jpg?alt=media&token=57779667-a306-41fc-9504-230b3dbdf811",
-//     "point": 0,
-//     "statusMessage": "",
-//     "userId": ""
-// }
-
 
 class OrderCal extends Component {
 

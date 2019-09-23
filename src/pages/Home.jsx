@@ -1,104 +1,157 @@
 import React, { Component } from 'react'
-import Typography from '@material-ui/core/Typography';
+/* import Typography from '@material-ui/core/Typography'; */
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 // import 'typeface-roboto';
-import Bigbutton from '../components/Bigbutton';
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
+import Bigbutton from './home/Bigbutton';
+/* import Switch from '@material-ui/core/Switch';
+import { withStyles } from '@material-ui/core/styles'; */
+import firebase from '../Firebase'
 
-
-
-const IOSSwitch = withStyles(theme => ({
-    root: {
-      width: 42,
-      height: 26,
-      padding: 0,
-      margin: theme.spacing(1),
-    },
-    switchBase: {
-      padding: 1,
-      '&$checked': {
-        color: theme.palette.common.white,
-        '& + $track': {
-          backgroundColor: '#52d869',
-          opacity: 1,
-          border: 'none',
-        },
-      },
-      '&$focusVisible $thumb': {
-        color: '#52d869',
-        border: '6px solid #fff',
+/* const IOSSwitch = withStyles(theme => ({
+  root: {
+    width: 42,
+    height: 26,
+    padding: 0,
+    margin: theme.spacing(1),
+  },
+  switchBase: {
+    padding: 1,
+    '&$checked': {
+      color: theme.palette.common.white,
+      '& + $track': {
+        backgroundColor: '#52d869',
+        opacity: 1,
+        border: 'none',
       },
     },
-    thumb: {
-      width: 24,
-      height: 24,
+    '&$focusVisible $thumb': {
+      color: '#52d869',
+      border: '6px solid #fff',
     },
-    track: {
-      borderRadius: 26 / 2,
-      border: `1px solid ${theme.palette.grey[400]}`,
-      backgroundColor: theme.palette.grey[50],
-      opacity: 1,
-      transition: theme.transitions.create(['background-color', 'border']),
-    },
-    checked: {},
-    focusVisible: {},
-  }))(({ classes, ...props }) => {
-    return (
-      <Switch
-        focusVisibleClassName={classes.focusVisible}
-        disableRipple
-        classes={{
-          root: classes.root,
-          switchBase: classes.switchBase,
-          thumb: classes.thumb,
-          track: classes.track,
-          checked: classes.checked,
-        }}
-        {...props}
-      />
-    );
-  });
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+  },
+  track: {
+    borderRadius: 26 / 2,
+    border: `1px solid ${theme.palette.grey[400]}`,
+    backgroundColor: theme.palette.grey[50],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color', 'border']),
+  },
+  checked: {},
+  focusVisible: {},
+}))(({ classes, ...props }) => {
+  return (
+    <Switch
+      focusVisibleClassName={classes.focusVisible}
+      disableRipple
+      classes={{
+        root: classes.root,
+        switchBase: classes.switchBase,
+        thumb: classes.thumb,
+        track: classes.track,
+        checked: classes.checked,
+      }}
+      {...props}
+    />
+  );
+}); */
 
 
 
 export default class Home extends Component {
-    constructor() {
-        super();
-        this.state = {
-            status: true
-        }
+  constructor() {
+    super();
+    this.state = {
+      status: true,
+      checked: true,
+      button: [],
+      buttonList: []
     }
-    
-    render() {
-        return (
-            <div >
-                <Container maxWidth="xl" style={{ height: '100vh' }}>
-                    <Grid container style={{ height: '100vh' }}
-                        alignItems="center"
-                        justify="space-evenly">
-                        <Grid item xs={6}>
-                        </Grid>
-                        <Grid item xs={6} container justify="flex-end">
-                            <Typography variant="h2" style={{ color: "#114B5F" }}>
-                                <b>Status :</b> Open  
-                                <IOSSwitch/>
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={8} sm={10} container direction="row" justify="space-evenly" >
-                            <Bigbutton to="/cashier" onclick="activateLasers()" text="Cashier" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fcashier%20(1).svg?alt=media&token=b1a52dee-1c7e-4a47-9e30-d50aa27f308d" />
-                            <Bigbutton to="/order" text="Order" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fmenu.svg?alt=media&token=73832d6e-0000-4d25-9f8d-e8599e86e021" />
-                            <Bigbutton to="/history" text="History" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fhistory.svg?alt=media&token=52479cd4-fb36-4097-8742-d9c3587f16c7" />
-                        </Grid>
-                        <Grid item lg={8} sm={10} container direction="row" justify="space-evenly">
-                            <Bigbutton to="/menu" text="Menu" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Frestaurant.svg?alt=media&token=6b8541b9-fbeb-4c3e-8857-ec8996beee20" />
-                            <Bigbutton to="/member" text="Member" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fid-card.svg?alt=media&token=78ea1153-848c-413e-95bc-a038028bdbe3" />
-                            <Bigbutton to="/member" text="Staff" img="https://firebasestorage.googleapis.com/v0/b/coffe-system-yiakpd.appspot.com/o/MenuIcon%2Fconsultation.svg?alt=media&token=0f515610-61a4-4a62-b3a3-4b35c5ed3c47" />
-                        </Grid>
-                    </Grid>
-                </Container>
-            </div>
-        )
+    this._isMounted = false;
+  }
+
+  getButtonList = () => {
+    firebase.database().ref("buttonList").on("value", snapshot => {
+      let val = snapshot.val()
+      this.setState({ buttonList: val })
+    })
+  }
+
+  getButton = () => {
+    let user = firebase.auth().currentUser;
+
+    firebase.database().ref("staff").on("value", snapshot => {
+      let val = snapshot.val()
+      let arr = []
+      if (val[user.uid].role !== undefined) {
+        arr = val[user.uid].role
+        this.setState({
+          button: this.state.buttonList.filter(function(cur) {
+              return arr.includes(cur.text)
+          },{})
+        })
+        //console.log(this.state.button)
+      }
+    })
+  }
+
+  async componentDidMount() {
+    this._isMounted = true;
+    if (this._isMounted) {
+      await this.getButtonList()
+      await this.getButton()
     }
+
+    /* this.storeRef.on("value", snapshot=>{
+      let val = snapshot.val()
+      this.setState({checked : val.storeStatus} )
+    }) */
+  }
+
+  /* handleChange = (event) => {
+    console.log(this.state.checked)
+    this.setState({ checked: !this.state.checked });
+    firebase.database().ref("store").set({
+      storeStatus: this.state.checked
+    })
+  } */
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  render() {
+
+    return (
+      <div >
+        <Container maxWidth="xl" style={{ height: '100vh', backgroundColor: "#FFC1B1" }}>
+          <Grid container style={{ height: '100vh' }}
+            alignItems="flex-start"
+            justify="space-evenly">
+            <Grid item xs={6}>
+            </Grid>
+            <Grid item xs={6} container justify="flex-end">
+              {/* <Typography variant="h2" style={{ color: "#114B5F", marginTop: "15px" }}>
+                <b>Status :</b> {this.state.checked ? (<span>Close</span>) : (<span>Open</span>)}
+                <IOSSwitch
+                  onChange={(event) => this.handleChange(event)}
+                  value={this.state.checked} />
+              </Typography> */}
+            </Grid>
+            <Grid item xs={6} lg={6} sm={10} container direction="row" justify="space-evenly" >
+              {console.log(this.state.button)}
+              {this.state.button.map((cur, i) => {
+                return (
+                  <Bigbutton key={i} to={cur.to} text={cur.text} img={cur.img} />
+                )
+              })}
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+    )
+  }
 }

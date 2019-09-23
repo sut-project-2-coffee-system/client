@@ -51,7 +51,7 @@ const SignUp = (props) => {
                 alert(error.message)
             })
     }
-
+ 
     const handleChange = (event) => {
         event.persist();
         setMyform(oldmyform => ({

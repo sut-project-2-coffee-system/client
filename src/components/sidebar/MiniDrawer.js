@@ -37,6 +37,8 @@ import { ThemeProvider } from "@material-ui/styles";
 import createOverrides from '../../theme';
 import Button from '@material-ui/core/Button';
 import firebase from '../../Firebase'
+import Staff from '../../pages/staff/Staff';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 const baseTheme = createMuiTheme();
 
@@ -208,6 +210,10 @@ function MiniDrawer({sideBarName,dispatch,props}) {
                         <ListItemIcon><HistoryIcon style={{fontSize: 40}}/></ListItemIcon>
                      <ListItemText primary="history" ></ListItemText>
                     </ListItem>
+                    <ListItem component={Link} to="/staff">
+                        <ListItemIcon><AssignmentIndIcon style={{fontSize: 40}}/></ListItemIcon>
+                     <ListItemText primary="Staff" ></ListItemText>
+                    </ListItem>
                 </List>
                 <Divider />
             </Drawer>
@@ -221,8 +227,8 @@ function MiniDrawer({sideBarName,dispatch,props}) {
                     <Route exact path="/Cashier" render={(props) => <Cashier {...props} title={"Cashier Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/history" render={(props) => <History {...props} title={"History Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/promotion" render={(props) => <Promotion {...props} title={"Promotion Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
+                    <Route exact path="/staff" render={(props) => <Staff {...props} title={"Staff Page"} sideBarName={(name) => dispatch({ type: 'sideBarName', payload: name })}/>}/>
                     <Route exact path="/contact" component={() => "Contact"} />
-                    <Route exact path="/Home-1" component={() => "Home-1"} />
                     <Route exact path="/Home-2" component={() => "Home-2"} />
                     <Route exact path="/Home-3" component={() => "Home-3"} />
                     <Route exact path="/Page-1" component={() => "Page-1"} />

@@ -3,27 +3,26 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import { DialogTitle, DialogContent, DialogActions } from '../../components/dialog/CustomDialog'
-import QrReader from 'react-qr-reader'
+import Qr from './Qr'
 
 const QrCodeReader = (props) => {
     const [open, setOpen] = React.useState(false);
     const [result, setResult] = React.useState('')
 
     const handleClickOpen = () => {
+        setResult('')
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
-
-    const handleScan = data => {
+    const setScanResult = (data) => {
         if (data) {
             setResult(data)
         }
-    }
-    const handleError = err => {
-        console.error(err)
-        
+        else{
+            setResult('')
+        }
     }
     const handleSave = () =>{
         if(result)
@@ -34,18 +33,14 @@ const QrCodeReader = (props) => {
     return (
         <div>
             <Button variant="outlined" color="secondary" onClick={handleClickOpen} fullWidth>
-                Open dialog
+                SCAN QR CODE
             </Button>
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} >
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                     Qr reader
                 </DialogTitle>
                 <DialogContent dividers style={{minWidth: 300,minHeight: 1}} >
-                    <QrReader
-                        delay={300}
-                        onError={handleError}
-                        onScan={handleScan}
-                    />
+                        <Qr scan={setScanResult}></Qr>
                     <Typography gutterBottom>
                         {result}
                     </Typography>

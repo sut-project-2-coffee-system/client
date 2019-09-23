@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 export default class Bigbutton extends Component {
     render() {
         return (
-            <div>
+            <div style={{marginBottom:"25px"}}>
                 <Link
                     component="button"
                     to={this.props.to}

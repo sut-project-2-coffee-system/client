@@ -48,7 +48,7 @@ const SignIn = (props) => {
     <div style={{ backgroundSize: 'cover', backgroundImage: `url(${'http://www.twitrcovers.com/wp-content/uploads/2014/06/Coffee-l.jpg'})` }}>
       <Grid container direction="row" justify="center" alignItems="center" spacing={0} style={{ minHeight: '100vh' }}>
         <Grid item xs={6} >
-          <form onSubmit={handleSubmit}>
+          
             <Card className={classes.card}>
               <CardHeader style={{textAlign: 'center'}} title="Sign in" subheader = 'Use your account' />
               <CardContent>
@@ -69,19 +69,19 @@ const SignIn = (props) => {
               <CardActions disableSpacing>
                 <Grid container justify='space-between' spacing={0}>
                   <Grid item >
-                    <Button variant="text" size="large" color="primary" onClick={() => props.history.push('/sign-up')} >
+                    {/* <Button variant="text" size="large" color="primary" onClick={() => props.history.push('/sign-up')} >
                         Create account
-                    </Button>
+                    </Button> */}
                   </Grid>
                   <Grid item >
-                    <Button variant="contained" size="large" color="primary" type="submit" >
+                    <Button variant="contained" size="large" color="primary" onClick={handleSubmit} >
                       Sign in
                     </Button>
                   </Grid>
                 </Grid>
               </CardActions>
             </Card>
-          </form>
+          
         </Grid>
       </Grid>
     </div>

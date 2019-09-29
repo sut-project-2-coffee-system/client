@@ -74,17 +74,17 @@ export default class Home extends Component {
     this._isMounted = false;
   }
 
-  getButtonList = () => {
-    firebase.database().ref("buttonList").on("value", snapshot => {
+  getButtonList = async () => {
+    await firebase.database().ref("buttonList").on("value", snapshot => {
       let val = snapshot.val()
       this.setState({ buttonList: val })
     })
   }
 
-  getButton = () => {
+  getButton = async () => {
     let user = firebase.auth().currentUser;
 
-    firebase.database().ref("staff").on("value", snapshot => {
+    await firebase.database().ref("staff").on("value", snapshot => {
       let val = snapshot.val()
       let arr = []
       if (val[user.uid].role !== undefined) {
@@ -99,12 +99,12 @@ export default class Home extends Component {
     })
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     this._isMounted = true;
-    if (this._isMounted) {
+    //if (this._isMounted) {
       await this.getButtonList()
       await this.getButton()
-    }
+    //}
 
     /* this.storeRef.on("value", snapshot=>{
       let val = snapshot.val()

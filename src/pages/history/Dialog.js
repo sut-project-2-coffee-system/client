@@ -16,9 +16,7 @@ import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import firebase from '../../Firebase'
 import { loadmenu } from '../../actions'
-import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -35,11 +33,9 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
         padding: theme.spacing(2),
-        // textAlign: 'center',
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
         marginBottom: theme.spacing(2),
-        // margin: theme.spacing(2, 0),
     },
     divider: {
         margin: theme.spacing(2, 2),
@@ -58,10 +54,6 @@ function FullScreenDialog(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [input, setInput] = React.useState(0);
-    const [discount, setDiscount] = React.useState(0);
-    const [discountPercent, setPercentDiscount] = React.useState(0);
-    const [percentCheck, setPercentCheck] = React.useState(false);
-    const [discountCheck, setDiscountCheckCheck] = React.useState(false);
     let totalPrice = 0;
 
     useEffect(() => {
@@ -79,13 +71,6 @@ function FullScreenDialog(props) {
     function handleChangeInput(event) {
         setInput(event.target.value)
     }
-    function handleChangePercentDiscount(event) {
-        setPercentDiscount(event.target.value)
-    }
-
-    function handleChangeDiscount(event) {
-        setDiscount(event.target.value)
-    }
 
     function onSave() {
         let orderTarget
@@ -95,6 +80,13 @@ function FullScreenDialog(props) {
             orderTarget.timestamp = Date.now()
         });
         firebase.database().ref(`order/${props.order.key}`).update(orderTarget)
+
+        firebase.database().ref('member').child(orderTarget.lineProfile).once('value', function (snapshot) {
+            let point = orderTarget.total >= 20 ? Math.floor(orderTarget.total / 20) : 0
+            firebase.database().ref('member').child(orderTarget.lineProfile).update({
+              point : snapshot.val().point + point
+            })
+          })
         setOpen(false);
     }
 
@@ -107,7 +99,6 @@ function FullScreenDialog(props) {
                 }
             })
         });
-        totalPrice = (totalPrice - (totalPrice * discountPercent / 100) - discount).toFixed(2)
     }
 
 
@@ -179,36 +170,6 @@ function FullScreenDialog(props) {
                                 <Typography style={{ fontSize: 20 }} color="textSecondary" gutterBottom>
                                     ทอน: {(input - totalPrice).toFixed(2)}
                                 </Typography>
-                                <FormGroup row>
-                                    <FormControlLabel label="ส่วนลด(เปอร์เซ็น)" labelPlacement="top"
-                                        control={
-                                            <Switch
-                                                checked={percentCheck}
-                                                onChange={() => { setPercentCheck(!percentCheck) }}
-                                                value={percentCheck}
-                                                size="medium"
-                                                inputProps={{ 'aria-label': 'secondary checkbox' }}
-                                                color="primary" />} />
-
-                                    <FormControlLabel label="ส่วนลด(บาท)" labelPlacement="top"
-                                        control={
-                                            <Switch
-                                                checked={discountCheck}
-                                                onChange={() => { setDiscountCheckCheck(!discountCheck) }}
-                                                value={discountCheck}
-                                                size="medium"
-                                                inputProps={{ 'aria-label': 'secondary checkbox' }}
-                                                color="primary" />} />
-                                </FormGroup>
-                                {percentCheck === true &&
-                                    <TextField id="outlined-full-width" type="number"  label="เปอร์เซ็นส่วนลด" style={{ margin: 2 }} placeholder="เปอร์เซ็นส่วนลด เช่น 20" onChange={handleChangePercentDiscount}
-                                        fullWidth margin="normal" variant="outlined"
-                                        inputProps={{ min: "0", max: "100", step: "1" }} />}
-                                <br></br>
-                                {discountCheck === true &&
-                                    <TextField id="outlined-full-width" type="number" label="ส่วนลดเป็นบาท" style={{ margin: 2 }} placeholder="ส่วนลด(บาท) เช่น 20" onChange={handleChangeDiscount}
-                                        fullWidth margin="normal" variant="outlined"
-                                        inputProps={{ min: "0", max: "100", step: "1" }} />}
                             </Paper>
                         </Grid>
                     </Grid>

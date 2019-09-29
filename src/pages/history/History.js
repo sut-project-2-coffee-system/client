@@ -67,13 +67,6 @@ class History extends Component {
                   return <FullScreenDialog order={rowData}/>
               }
             },
-            // {
-            //     title: 'จำนวน',
-            //     field: 'amount',
-            //     render: rowData => (
-            //         <p>{Object.keys(rowData.orderList).length}</p>
-            //     ),
-            // },
           ]}
           data={OrderByStatusDone}
           detailPanel={rowData => {

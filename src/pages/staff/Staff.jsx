@@ -34,31 +34,6 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
 
-/* const columns = [
-    { id: 'name', label: 'Name', minWidth: 200 },
-    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-    {
-        id: 'population',
-        label: 'Population',
-        minWidth: 120,
-        align: 'right',
-        format: value => value.toLocaleString(),
-    },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 120,
-        align: 'right',
-        format: value => value.toLocaleString(),
-    },
-    {
-        id: 'density',
-        label: 'Density',
-        minWidth: 120,
-        align: 'right',
-        format: value => value.toFixed(2),
-    },
-]; */
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 200 },
@@ -148,7 +123,6 @@ const names = [
     'History',
     'Menu',
     'Promotion',
-    'Member',
     'Staff'
 ];
 
@@ -221,37 +195,82 @@ function Staff(props) {
         "prefixTh": "นาย",
         "role": [],
         "sex": "ชาย",
-        "status": "โสด"
+        "status": "โสด",
+        "idCardImageURL": "",
+        "houseParticularsImageURL": ""
     }
 
     const [myform, setMyform] = React.useState(initForm);
     const [snack, setSnack] = React.useState({ open: false, message: "" });
+    const [uploadValue, setUploadValue] = useState(0)
+    const [messag, setMessag] = useState("")
+
+    function handleChangeUpload(event, type) {
+        let file = event.target.files
+        const fileUpload = file[0];
+        const storageRef = firebase.storage().ref(`verify/${file[0].name}`);
+        const task = storageRef.put(fileUpload)
+
+        task.on(`state_changed`, (snapshort) => {
+            //console.log(snapshort.bytesTransferred, snapshort.totalBytes)
+            let percentage = (snapshort.bytesTransferred / snapshort.totalBytes) * 100;
+            //Process
+            setUploadValue(percentage)
+            console.log(percentage);
+
+        }, (error) => {
+            //Error
+            setMessag(`Upload error : ${error.message}`)
+        }, () => {
+            //Success
+            setMessag(`Upload Success`)
+            task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                console.log('File available at', downloadURL);
+                //setNewMenu({...newMenu, image:downloadURL})
+                //setCurMenu({...curMenu, image:downloadURL})
+                if (type === "idCardImageURL")
+                    setMyform({ ...myform, idCardImageURL: downloadURL })
+                if (type === "houseParticularsImageURL")
+                    setMyform({ ...myform, houseParticularsImageURL: downloadURL })
+            });
+        })
+    }
+
 
     useEffect(() => {
-        const db = firebase.database().ref("staff").on('value', snapshot => {
-            var val = snapshot.val();
-            setStaff(val)
-            setRows(() => {
-                let temp = []
-                for (let key in val) {
-                    console.log(val[key].role);
-                    temp.push(
-                        {
-                            code: key,
-                            name: val[key].prefixTh + " " + val[key].firstNameTh + " " + val[key].lastNameTh,
-                            email: val[key].email,
-                            position: val[key].position,
-                            money: val[key].money,
-                            role: val[key].role === undefined  ? "ไม่มีสิทธิ์เข้าถึง" :  val[key].role.join()
+        let isSubscribed = true
+        async function db() {
+
+            await firebase.database().ref("staff").on('value', snapshot => {
+
+                if (isSubscribed) {
+                    var val = snapshot.val();
+                    setStaff(val)
+                    setRows(() => {
+                        let temp = []
+                        for (let key in val) {
+                            console.log(val[key].role);
+                            temp.push(
+                                {
+                                    code: key,
+                                    name: val[key].prefixTh + " " + val[key].firstNameTh + " " + val[key].lastNameTh,
+                                    email: val[key].email,
+                                    position: val[key].position,
+                                    money: val[key].money,
+                                    role: val[key].role === undefined ? "ไม่มีสิทธิ์เข้าถึง" : val[key].role.join()
+                                }
+                            )
                         }
-                    )
+                        return temp;
+                    })
                 }
-                return temp;
+
             })
 
-        })
+        }
+        db()
 
-        return () => db
+        return () => isSubscribed = false
     }, [])
 
     const handleClickSnack = (msg) => {
@@ -270,11 +289,11 @@ function Staff(props) {
 
     const handleSubmit = (event) => {
         console.log(myform);
-        let user = {uid:"xxx"};
+        let user = { uid: "xxx" };
         if (myform.code === "") {
             event.preventDefault();
             firebase.auth().createUserWithEmailAndPassword(myform.email, myform.password).then((userCredential) => {
-                user =userCredential.user;
+                user = userCredential.user;
                 if (userCredential) {
                     userCredential.user.updateProfile({
                         displayName: myform.displayName,
@@ -288,7 +307,7 @@ function Staff(props) {
                     else {
                         firebase.auth().currentUser.sendEmailVerification();
                         console.log(user);
-                        
+
                         handleClickSnack("กรุณายืนยัน email ที่ " + myform.email)
                         //props.history.push('/')
                         delete myform.password
@@ -360,7 +379,7 @@ function Staff(props) {
 
 
         if (key.target === undefined) {
-            if(staff[key].role === undefined)
+            if (staff[key].role === undefined)
                 staff[key].role = []
             setMyform({ ...staff[key], code: key })
         }
@@ -373,7 +392,7 @@ function Staff(props) {
     function handleClose() {
         setOpen(false);
     }
-    
+
 
     return (
         <div>
@@ -777,8 +796,67 @@ function Staff(props) {
                             <Grid item xs={1}></Grid>
                         </Grid>
                     </Paper>
+                    <Paper className={classes.paper}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" className={classes.title}>
+                                    เอกสาร
+                                    </Typography>
+                            </Grid>
+                            <Grid item xs={1}></Grid>
+                            <Grid item xs={10}>
+                                <Paper className={classes.paper}>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography variant="h6" className={classes.title}>
+                                                รูปบัตรประชาชน
+                                    </Typography>
+                                        </Grid>
+                                        <Grid item xs={1}></Grid>
+                                        <Grid item xs={10}>
+                                            <input
+                                                accept="image/*"
+                                                type="file"
+                                                onChange={(e) => handleChangeUpload(e, "idCardImageURL")}
+                                            />
+                                            {(uploadValue > 0 && uploadValue < 100) && (<span>{uploadValue}%</span>)} {uploadValue === 100 && (<span>{messag}</span>)}
+                                            {myform.idCardImageURL !== undefined &&
+                                                <div><img style={{maxHeight:"500px" ,maxWidth:"500px"}} src={myform.idCardImageURL} alt="idCardImageURL" /></div>
+                                            }
+                                        </Grid>
+                                        <Grid item xs={1}></Grid>
+                                    </Grid>
+                                </Paper>
+                                <Paper className={classes.paper}>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography variant="h6" className={classes.title}>
+                                                รูปทะเบียนบ้าน
+                                    </Typography>
+                                        </Grid>
+                                        <Grid item xs={1}></Grid>
+                                        <Grid item xs={10}>
+                                            <input
+                                                accept="image/*"
+                                                type="file"
+                                                onChange={(e) => handleChangeUpload(e, "houseParticularsImageURL")}
+                                            />
+                                            {(uploadValue > 0 && uploadValue < 100) && (<span>{uploadValue}%</span>)} {uploadValue === 100 && (<span>{messag}</span>)}
+                                            {myform.houseParticularsImageURL !== undefined &&
+                                                <div><img style={{maxHeight:"500px" ,maxWidth:"500px"}} src={myform.houseParticularsImageURL} alt="houseParticularsImageURL" /></div>
+                                            }
+
+
+                                        </Grid>
+                                        <Grid item xs={1}></Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={1}></Grid>
+                        </Grid>
+                    </Paper>
                     {myform.code !== "" &&
-                        <Button variant="contained" size="medium" color="secondary" onClick={()=>deleteUser(myform.code)}>
+                        <Button variant="contained" size="medium" color="secondary" onClick={() => deleteUser(myform.code)}>
                             Delete
                     </Button>
                     }

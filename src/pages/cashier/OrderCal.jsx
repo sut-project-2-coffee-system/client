@@ -53,11 +53,11 @@ class OrderCal extends Component {
             order: [],
             check: false, //percent
             discountCheck: false, //baht
-            discount: 0,
-            percent: 0,
+            isUsePoint: false,
             orderTotal: 0,
             discountBaht: 0,
             discountPercent: 0,
+            usePoint: 0,
             lineProfile: {
                 "displayName": "",
                 "pictureUrl": "",
@@ -69,23 +69,13 @@ class OrderCal extends Component {
     }
     calTotal = () => {
         let total = 0
-        let discountBaht = 0
-        let discountPercent = 0
         this.props.shoppingCart.arr.forEach((cur, i) => {
             total = (Number(cur.price) * Number(cur.amount)) + total
         })
-        if (this.state.check && total >= this.state.discountPercent.buyTarget)
-            discountPercent = this.state.discountPercent.discount
-        else
-            discountPercent = 0
-        if (this.state.discountCheck && total >= this.state.discountBaht.buyTarget)
-            discountBaht = this.state.discountBaht.discount
-        else
-            discountBaht = 0
-        if (discountPercent === 0)
-            return total - discountBaht
-        else if (discountPercent !== 0)
-            return total - (total * discountPercent / 100).toFixed(2) - discountBaht
+        let discountBaht = this.state.discountCheck && total >= this.state.discountBaht.buyTarget ? this.state.discountBaht.discount : 0
+        let discountPercent = this.state.check  && total >= this.state.discountPercent.buyTarget ? this.state.discountPercent.discount : 0
+        let discountWithPoint = this.state.isUsePoint && this.state.usePoint ? this.state.usePoint * 0.2 : 0
+        return discountPercent === 0 ? total - discountBaht - discountWithPoint : total - (total * discountPercent / 100).toFixed(2) - discountBaht - discountWithPoint
     }
 
     handleChange = (event) => {
@@ -95,9 +85,20 @@ class OrderCal extends Component {
     }
 
     handleClick = () => {
+        let tempProfile = {
+            "displayName": "",
+            "pictureUrl": "",
+            "point": 0,
+            "statusMessage": "",
+            "userId": ""
+        }
+
         order.orderBy = "Unknow"
         order.timestamp = Date.now()
         order.total = this.calTotal()
+        let usePoint = this.state.isUsePoint ? this.state.usePoint : 0
+        let point = order.total >= 20 ? Math.floor(order.total / 20) : 0
+
         this.props.shoppingCart.arr.forEach((cur, i) => {
             order.orderKeyList.push(
                 {
@@ -107,12 +108,12 @@ class OrderCal extends Component {
                 }
             )
         })
+
         let lineProfile = this.state.lineProfile
         if (order.orderKeyList !== [] && lineProfile != null) {
-            console.log(this.state.lineProfile.userId)
             firebase.database().ref('member').orderByChild('userId').equalTo(lineProfile.userId).once('value', function (snapshot) {
                 if (snapshot.val() === null) {
-                    lineProfile.point = 0
+                    lineProfile.point = point
                     firebase.database().ref("member").push(lineProfile).then((snap) => {
                         order.lineProfile = snap.key
                         firebase.database().ref("order").push({
@@ -121,10 +122,9 @@ class OrderCal extends Component {
                         order.orderKeyList = []
                     })
                 }
-                else{
-                    console.log('Object.keys(snapshot.val())[0]',Object.keys(snapshot.val())[0])
+                else {
                     firebase.database().ref('member/').child(Object.keys(snapshot.val())[0]).update({
-                        point : snapshot.val()[Object.keys(snapshot.val())[0]].point + 1
+                        point: snapshot.val()[Object.keys(snapshot.val())[0]].point + point - usePoint
                     })
                     order.lineProfile = Object.keys(snapshot.val())[0]
                     firebase.database().ref("order").push({
@@ -137,7 +137,15 @@ class OrderCal extends Component {
         else
             alert("ไม่สามารถเพิ่มได้")
 
-
+        this.setState({
+            lineProfile: tempProfile,
+            usePoint: 0,
+            discountBaht: 0,
+            discountPercent: 0,
+            check: false,
+            discountCheck: false, 
+            isUsePoint: false,
+        })
         this.props.dispatch({ type: "clearOrder" })
         this.props.dispatch(storeStatusOrderCalDrwer(false))
     }
@@ -152,6 +160,32 @@ class OrderCal extends Component {
     render() {
         let date = new Date();
         let { shoppingCart, promotionList } = this.props
+
+        const RenderUsePoint = () => {
+            let profile = this.state.lineProfile
+            let arr = []
+            let round = profile.point >= 100 ? Math.floor(this.state.lineProfile.point / 100) : 0
+            for (let i = 1; i <= round; i++) {
+                arr.push(i * 100)
+            }
+            return (
+                <FormControl style={{ margin: 1, width: '100%', }}>
+                    <InputLabel htmlFor="age-simple">ใช้คะแนนสะสม</InputLabel>
+                    <Select
+                        value={this.state.usePoint}
+                        onChange={this.handleChange}
+                        inputProps={{
+                            name: 'usePoint',
+                            id: 'age-simple',
+                        }}
+                    >
+                        {arr.map((item, index) => {
+                            return <MenuItem key={index} value={item}>ใช้ {item} คะแนน ลด {item * 0.2} บาท</MenuItem>
+                        })}
+                    </Select>
+                </FormControl>
+            )
+        }
         if (shoppingCart.arr === undefined || null)
             return null
         return (
@@ -200,6 +234,7 @@ class OrderCal extends Component {
                     <Typography variant="h6">
                         ราคารวม {this.calTotal()}
                     </Typography>
+                    <Divider variant="middle" />
                     <FormGroup row>
                         <FormControlLabel label="ส่วนลด(เปอร์เซ็น)" labelPlacement="top"
                             control={
@@ -220,6 +255,17 @@ class OrderCal extends Component {
                                     size="medium"
                                     inputProps={{ 'aria-label': 'secondary checkbox' }}
                                     color="primary" />} />
+                        {this.state.lineProfile.point >= 100 && this.state.lineProfile.userId !== "" &&
+                            <FormControlLabel label="ใช้คะแนนสะสม" labelPlacement="top"
+                                control={
+                                    <Switch
+                                        checked={this.state.isUsePoint}
+                                        onChange={() => { this.setState((prevState) => ({ isUsePoint: !prevState.isUsePoint })) }}
+                                        value={this.state.isUsePoint}
+                                        size="medium"
+                                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                        color="primary" />} />
+                        }
                     </FormGroup>
                     {this.state.check === true &&
                         <FormControl style={{ margin: 1, width: '100%', }}>
@@ -237,6 +283,7 @@ class OrderCal extends Component {
                                 })}
                             </Select>
                         </FormControl>}
+                    <Divider variant="middle" />
                     <br></br>
                     {this.state.discountCheck === true &&
                         <FormControl style={{ margin: 1, width: '100%', }}>
@@ -255,6 +302,9 @@ class OrderCal extends Component {
                             </Select>
                         </FormControl>
                     }
+                    {this.state.isUsePoint === true && <RenderUsePoint />}
+                    <Divider variant="middle" />
+                    <br></br>
                     <Button fullWidth variant="outlined" size="medium" color="primary" onClick={this.handleClick}>
                         Add to Order
                     </Button>

@@ -29,10 +29,10 @@ export default class Qr extends Component {
                     delay={300}
                     onError={this.handleError}
                     onScan={this.handleScan}
-                    style={{ width: '100%' }}
+                    style={{ width: '400px',height: '400px' }}
                     legacyMode={this.state.legacyMode}/>
                 <FormGroup row>
-                    <FormControlLabel label="legacyMode" labelPlacement="top"
+                    <FormControlLabel label="เปิดกล้องไม่ได้ ?" labelPlacement="top"
                         control={
                             <Switch
                                 checked={this.state.legacyMode}
@@ -48,7 +48,7 @@ export default class Qr extends Component {
                                 color="primary" />} />
                 </FormGroup>
                 {this.state.legacyMode === true &&
-                    <Button onClick={this.openImageDialog} variant="outlined" size="medium" color="primary">Insert qr</Button>
+                    <Button onClick={this.openImageDialog} variant="outlined" size="medium" color="primary">Insert Qrcode</Button>
                 }
             </div>
         )

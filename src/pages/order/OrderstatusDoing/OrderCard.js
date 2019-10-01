@@ -82,8 +82,8 @@ export default function OrderCard(props) {
               เบอร์ติดต่อ: {props.orderselect.tel}<br />
               สถานที่: {props.orderselect.location1.split(", l")[0]}<br />
               รายละเอียด: {props.orderselect.location2}
-              {props.orderselect.location1.split(", l")[1] !== undefined && props.orderselect.location1.split(", l")[2] !== undefined && <div>Google Map : <a href={"https://maps.google.com/maps?daddr="+props.orderselect.location1.split(", l")[1].split(": ")[1]+","+props.orderselect.location1.split(", l")[2].split(": ")[1]+"&amp;ll="}>ลิงค์สำหรับเปิด</a></div>}
             </Typography>
+            {props.orderselect.location1.split(", l")[1] !== undefined && props.orderselect.location1.split(", l")[2] !== undefined && <div>Google Map : <a href={"https://maps.google.com/maps?daddr="+props.orderselect.location1.split(", l")[1].split(": ")[1]+","+props.orderselect.location1.split(", l")[2].split(": ")[1]+"&amp;ll="}>ลิงค์สำหรับเปิด</a></div>}
           </CardContent>
         </Grid>
         <CardActions align="end" >

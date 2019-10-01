@@ -34,11 +34,16 @@ const SignIn = (props) => {
   const handleSubmit = (event) =>{
     event.preventDefault();
     firebase.auth().signInWithEmailAndPassword(myform.email, myform.password).then((user) => {
-      props.dispatch({
-        type: 'signIn',
-        payload: user
-      })
-      props.history.push('/')
+      if(user.user.emailVerified){
+        props.dispatch({
+          type: 'signIn',
+          payload: user
+        })
+        props.history.push('/')
+      }
+      else{ 
+        alert('Please check your email to verify email')
+      }
     }).catch((error) => {
       alert(error.message)
     });

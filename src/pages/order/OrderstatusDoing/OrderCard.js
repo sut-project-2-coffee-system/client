@@ -79,6 +79,7 @@ export default function OrderCard(props) {
           <CardContent >
             <Typography component="p">
               สั่งโดยคุณ: {props.orderselect.orderBy}<br />
+              สถานะ: {props.orderselect.pay}<br />
               เบอร์ติดต่อ: {props.orderselect.tel}<br />
               สถานที่: {props.orderselect.location1.split(", l")[0]}<br />
               รายละเอียด: {props.orderselect.location2}

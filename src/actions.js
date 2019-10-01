@@ -40,14 +40,12 @@ export const loadMember = () => {
         firebase.database().ref('member').on('value', function (snapshot) {
             let items = snapshot.val();
             let newitem = [];
-
             for (let item in items) {
                 newitem.push({
                     ...items[item],
                     key: item
                 })
             }
-
             dispatch({
                 type: 'memberList',
                 payload: newitem
@@ -64,15 +62,10 @@ export const loadmenu = () => {
         itemsRef.on('value', (snapshot) => {
             let items = snapshot.val();
             let newitem = [];
-            let index = -1;
             for (let item in items) {
-                index++
                 newitem.push({
+                    ...items[item],
                     key: item,
-                    image: items[item].image,
-                    name: items[item].name,
-                    no: index,
-                    price: items[item].price,
                 })
             }
             dispatch({
@@ -96,26 +89,18 @@ export const loadPromotion = () => {
             let itemPercentTemp = [];
             let index = 0
             for (let promotion in promotions) {
-                for(let item in promotions[promotion]){
-                    if(index === 0){
-                        if(promotions[promotion][item].startDate <= promotions[promotion][item].endDate){
+                for (let item in promotions[promotion]) {
+                    if (promotions[promotion][item].startDate <= promotions[promotion][item].endDate) {
+                        if (index === 0) {
                             itemBahtTemp.push({
+                                ...promotions[promotion][item],
                                 key: item,
-                                buyTarget:promotions[promotion][item].fullBuy,
-                                discount: promotions[promotion][item].value,
-                                endDate: promotions[promotion][item].endDate,
-                                startDate: promotions[promotion][item].startDate,
-                            })                           
+                            })
                         }
-                    }
-                    else {
-                        if(promotions[promotion][item].startDate <= promotions[promotion][item].endDate){
+                        else {
                             itemPercentTemp.push({
+                                ...promotions[promotion][item],
                                 key: item,
-                                buyTarget:promotions[promotion][item].fullBuy,
-                                discount: promotions[promotion][item].value,
-                                endDate: promotions[promotion][item].endDate,
-                                startDate: promotions[promotion][item].startDate,
                             })
                         }
                     }
@@ -133,26 +118,26 @@ export const loadPromotion = () => {
 }
 
 const sortByEarliestDebutDate = (nbaPlayers) => {
-    return nbaPlayers.sort(function(a, b){
-      return new Date(a.time) - new Date(b.time);
+    return nbaPlayers.sort(function (a, b) {
+        return new Date(a.time) - new Date(b.time);
     });
 }
 export const storeShoppingCart = (data = {}) => (
     {
-        type: 'orderInOrderList', 
+        type: 'orderInOrderList',
         data
     }
 )
-export const storeStatusOrderCalDrwer = (data = false) =>{
-    if(data === true){
+export const storeStatusOrderCalDrwer = (data = false) => {
+    if (data === true) {
         return {
-            type: 'openOrderCal', 
+            type: 'openOrderCal',
             data
         }
     }
-    else{
+    else {
         return {
-            type: 'closeOrderCal', 
+            type: 'closeOrderCal',
             data
         }
     }

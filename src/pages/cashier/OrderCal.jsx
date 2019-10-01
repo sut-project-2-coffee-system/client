@@ -75,7 +75,7 @@ class OrderCal extends Component {
         let discountBaht = this.state.discountCheck && total >= this.state.discountBaht.buyTarget ? this.state.discountBaht.discount : 0
         let discountPercent = this.state.check  && total >= this.state.discountPercent.buyTarget ? this.state.discountPercent.discount : 0
         let discountWithPoint = this.state.isUsePoint && this.state.usePoint ? this.state.usePoint * 0.2 : 0
-        return discountPercent === 0 ? total - discountBaht - discountWithPoint : total - (total * discountPercent / 100).toFixed(2) - discountBaht - discountWithPoint
+        return discountPercent === 0 ? total - discountBaht - discountWithPoint : (total - (total * discountPercent / 100) - discountBaht - discountWithPoint).toFixed(2)
     }
 
     handleChange = (event) => {
@@ -112,26 +112,14 @@ class OrderCal extends Component {
         let lineProfile = this.state.lineProfile
         if (order.orderKeyList !== [] && lineProfile != null) {
             firebase.database().ref('member').orderByChild('userId').equalTo(lineProfile.userId).once('value', function (snapshot) {
-                if (snapshot.val() === null) {
-                    lineProfile.point = point
-                    firebase.database().ref("member").push(lineProfile).then((snap) => {
-                        order.lineProfile = snap.key
-                        firebase.database().ref("order").push({
-                            ...order
-                        })
-                        order.orderKeyList = []
-                    })
-                }
-                else {
-                    firebase.database().ref('member/').child(Object.keys(snapshot.val())[0]).update({
-                        point: snapshot.val()[Object.keys(snapshot.val())[0]].point + point - usePoint
-                    })
-                    order.lineProfile = Object.keys(snapshot.val())[0]
-                    firebase.database().ref("order").push({
-                        ...order
-                    })
-                    order.orderKeyList = []
-                }
+                firebase.database().ref('member/').child(Object.keys(snapshot.val())[0]).update({
+                    point: snapshot.val()[Object.keys(snapshot.val())[0]].point + point - usePoint
+                })
+                order.lineProfile = Object.keys(snapshot.val())[0]
+                firebase.database().ref("order").push({
+                    ...order
+                })
+                order.orderKeyList = []
             })
         }
         else

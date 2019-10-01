@@ -28,12 +28,12 @@ const QrCodeReader = (props) => {
     }
     const handleSave = () => {
         if (result)
-            props.onScanUser(result)
+            props.onScanUser(JSON.stringify(result))
         setOpen(false);
     }
 
     const RenderUserInfo = () => {
-        let user = JSON.parse(result)
+        let user = result
         return (
             <Grid container spacing={1}>
                 <Grid item xs={3}>

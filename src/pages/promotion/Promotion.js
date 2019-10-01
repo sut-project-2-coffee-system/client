@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 const data = {
     typeName: '',
     discount: '',
-    fullBuy: '',
+    buyTarget: '',
     startDate: new Date(),
     endDate: new Date()
 }
@@ -38,7 +38,7 @@ function Promotion(props) {
     const [values, setValues] = React.useState({
         typeName: '',
         discount: '',
-        fullBuy: '',
+        buyTarget: '',
         startDate: new Date(),
         endDate: new Date()
     });
@@ -68,8 +68,8 @@ function Promotion(props) {
         event.preventDefault();
         if (values.typeName !== '') {
             firebase.database().ref('promotion').child(values.typeName).push().set({
-                fullBuy: values.fullBuy,
-                value: values.discount,
+                buyTarget: values.buyTarget,
+                discount: values.discount,
                 startDate: values.startDate.getTime(),
                 endDate: values.endDate.getTime()
             })
@@ -124,7 +124,7 @@ function Promotion(props) {
                      </Grid>
                      <Grid item xs={4}>
                         <FormControl fullWidth className={classes.margin}>
-                            <Input id="adornment-amount" value={values.fullBuy} name="fullBuy" onChange={handleChange} placeholder="ซื้อครบ(บาท)" type="number"
+                            <Input id="adornment-amount" value={values.buyTarget} name="buyTarget" onChange={handleChange} placeholder="ซื้อครบ(บาท)" type="number"
                             startAdornment={<InputAdornment position="start">฿</InputAdornment>}
                             />
                         </FormControl>
@@ -168,7 +168,7 @@ function Promotion(props) {
                             <KeyboardDatePicker margin="normal" id="date-picker-dialog"  label="End Date" format="dd/MM/yyyy" value={values.endDate} onChange={handleEndDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
-                                                }}  style={{width: '100%'}}/>
+                                                }} minDate={new Date()} style={{width: '100%'}}/>
                         </MuiPickersUtilsProvider>
                         </Typography>
                      </Grid>

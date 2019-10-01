@@ -31,17 +31,17 @@ const SignIn = (props) => {
       [event.target.name]: event.target.value,
     }));
   }
-  const handleSubmit = (event) =>{
+  const handleSubmit = (event) => {
     event.preventDefault();
     firebase.auth().signInWithEmailAndPassword(myform.email, myform.password).then((user) => {
-      if(user.user.emailVerified){
+      if (user.user.emailVerified) {
         props.dispatch({
           type: 'signIn',
           payload: user
         })
         props.history.push('/')
       }
-      else{ 
+      else {
         alert('Please check your email to verify email')
       }
     }).catch((error) => {
@@ -53,40 +53,40 @@ const SignIn = (props) => {
     <div style={{ backgroundSize: 'cover', backgroundImage: `url(${'http://www.twitrcovers.com/wp-content/uploads/2014/06/Coffee-l.jpg'})` }}>
       <Grid container direction="row" justify="center" alignItems="center" spacing={0} style={{ minHeight: '100vh' }}>
         <Grid item xs={6} >
-          
-            <Card className={classes.card}>
-              <CardHeader style={{textAlign: 'center'}} title="Sign in" subheader = 'Use your account' />
-              <CardContent>
-                <Grid container spacing={0} direction="column">
-                  <Grid item xs>
-                    <TextField id="outlined-email-input" label="Email" className={classes.textField} type="email" name="email" autoComplete='off'
-                      required margin="normal" variant="outlined" onChange={handleChange} fullWidth />
-                  </Grid>
-                  <Grid item xs>
-                    <TextField id="outlined-password-input" label="password" className={classes.textField} type="password" name="password" autoComplete='off'
-                      required margin="normal" variant="outlined" onChange={handleChange} fullWidth />
-                  </Grid>
+
+          <Card className={classes.card}>
+            <CardHeader style={{ textAlign: 'center' }} title="Sign in" subheader='Use your account' />
+            <CardContent>
+              <Grid container spacing={0} direction="column">
+                <Grid item xs>
+                  <TextField id="outlined-email-input" label="Email" className={classes.textField} type="email" name="email" autoComplete='off'
+                    required margin="normal" variant="outlined" onChange={handleChange} fullWidth />
                 </Grid>
-                <Button variant="text" size="medium" color="primary" onClick={() => props.history.push('/forgot-password')} >
-                        Forgot password ?
+                <Grid item xs>
+                  <TextField id="outlined-password-input" label="password" className={classes.textField} type="password" name="password" autoComplete='off'
+                    required margin="normal" variant="outlined" onChange={handleChange} fullWidth />
+                </Grid>
+              </Grid>
+              <Button variant="text" size="medium" color="primary" onClick={() => props.history.push('/forgot-password')} >
+                Forgot password ?
                 </Button>
-              </CardContent>
-              <CardActions disableSpacing>
-                <Grid container justify='space-between' spacing={0}>
-                  <Grid item >
-                    {/* <Button variant="text" size="large" color="primary" onClick={() => props.history.push('/sign-up')} >
+            </CardContent>
+            <CardActions disableSpacing>
+              <Grid container justify='space-between' spacing={0}>
+                <Grid item >
+                  {/* <Button variant="text" size="large" color="primary" onClick={() => props.history.push('/sign-up')} >
                         Create account
                     </Button> */}
-                  </Grid>
-                  <Grid item >
-                    <Button variant="contained" size="large" color="primary" onClick={handleSubmit} >
-                      Sign in
-                    </Button>
-                  </Grid>
                 </Grid>
-              </CardActions>
-            </Card>
-          
+                <Grid item >
+                  <Button variant="contained" size="large" color="primary" onClick={handleSubmit} >
+                    Sign in
+                    </Button>
+                </Grid>
+              </Grid>
+            </CardActions>
+          </Card>
+
         </Grid>
       </Grid>
     </div>

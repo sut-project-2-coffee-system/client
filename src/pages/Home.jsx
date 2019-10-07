@@ -141,7 +141,7 @@ export default class Home extends Component {
                   value={this.state.checked} />
               </Typography> */}
             </Grid>
-            <Grid item xs={6} lg={6} sm={10} container direction="row" justify="space-evenly" >
+            <Grid item xs={7} lg={7} sm={7} container direction="row" justify="space-evenly" >
               {console.log(this.state.button)}
               {this.state.button.map((cur, i) => {
                 return (

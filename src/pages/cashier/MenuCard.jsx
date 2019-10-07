@@ -16,13 +16,13 @@ export default class MenuCard extends Component {
                         <CardActionArea>
                             <CardMedia
                                 component="img"
-                                alt="Contemplative Reptile"
+                                alt={this.props.menuName}
                                 height="140"
                                 image={this.props.imgUrl}
-                                title="Contemplative Reptile"
+                                title={this.props.menuName}
                             />
                             <CardContent>
-                                <Typography variant="h5" component="h2">
+                                <Typography variant="h6" component="h2">
                                     <b> {this.props.menuName}</b>
                                 </Typography>
                                 <Typography gutterBottom variant="h6" component="h2">

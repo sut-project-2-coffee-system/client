@@ -50,7 +50,7 @@ export default class Qr extends Component {
                     style={{ width: '400px', height: '400px' }}
                     legacyMode={this.state.legacyMode} />
                 <FormGroup row>
-                    <FormControlLabel label="เปิดกล้องไม่ได้ ?" labelPlacement="top"
+                    <FormControlLabel label="คลังรูปภาพ" labelPlacement="top"
                         control={
                             <Switch
                                 checked={this.state.legacyMode}

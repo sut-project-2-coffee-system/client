@@ -12,15 +12,41 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles(theme => ({
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+    menu: {
+        width: 200,
+    },
+}));
 
+const type = [
+    {
+        value: true,
+        label: 'กาแฟ',
+    },
+    {
+        value: false,
+        label: 'อื่นๆ',
+    }
+];
 function Menu(props) {
-
+    const classes = useStyles();
     useEffect(() => {
         props.dispatch(loadmenu())
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    const [value, setValue] = React.useState(0);
     const [dialogEdit, setDialogEdit] = useState(false);
     const [dialogAdd, setDialogAdd] = useState(false);
     const [curMenu, setCurMenu] = useState({});
@@ -28,10 +54,15 @@ function Menu(props) {
         "name": "",
         "price": "",
         "image": "",
+        "isCoffee": true,
     });
     const [uploadValue, setUploadValue] = useState(0)
     const [messag, setMessag] = useState("")
 
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     function handleChangeUpload(event) {
         let file = event.target.files
         const fileUpload = file[0];
@@ -53,11 +84,9 @@ function Menu(props) {
             setMessag(`Upload Success`)
             task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                 console.log('File available at', downloadURL);
-                setNewMenu({...newMenu, image:downloadURL})
-                setCurMenu({...curMenu, image:downloadURL})
+                setNewMenu({ ...newMenu, image: downloadURL })
+                setCurMenu({ ...curMenu, image: downloadURL })
             });
-
-
         })
     }
 
@@ -84,6 +113,7 @@ function Menu(props) {
             "name": curMenu.name,
             "price": curMenu.price,
             "image": curMenu.image,
+            "isCoffee": curMenu.isCoffee,
         });
         setDialogEdit(false);
     }
@@ -100,6 +130,7 @@ function Menu(props) {
             "name": "",
             "price": "",
             "image": "",
+            "isCoffee": true,
         })
     }
 
@@ -112,20 +143,63 @@ function Menu(props) {
         //console.log(newMenu);
     };
 
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <Typography
+                component="div"
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
+                <Box p={3}>{children}</Box>
+            </Typography>
+        );
+    }
 
     return (
         <div style={{ flexGrow: 1 }}>
-            <Grid container spacing={1}>
-                <Grid container item xs={12} spacing={3}>
-                    {props.menuList.map((cur, i) => {
-                        return (
-                            <Grid item xs={3} key={i}>
-                                <MenuCard menuName={cur.name} imgUrl={cur.image} price={cur.price} onClick={() => handleClickEdit(cur)}></MenuCard>
-                            </Grid>
-                        )
-                    })}
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+                style={{ marginBottom: "15px" }}
+            >
+                <Tab label="กาแฟ" />
+                <Tab label="อื่นๆ" />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+                <Grid container spacing={1}>
+                    <Grid container item xs={12} spacing={3}>
+                        {props.menuList.map((cur, i) => {
+                            return cur.isCoffee && (
+                                <Grid item xs={3} key={i}>
+                                    <MenuCard menuName={cur.name} imgUrl={cur.image} price={cur.price} onClick={() => handleClickEdit(cur)}></MenuCard>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                <Grid container spacing={1}>
+                    <Grid container item xs={12} spacing={3}>
+                        {props.menuList.map((cur, i) => {
+                            return !cur.isCoffee && (
+                                <Grid item xs={3} key={i}>
+                                    <MenuCard menuName={cur.name} imgUrl={cur.image} price={cur.price} onClick={() => handleClickEdit(cur)}></MenuCard>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+                </Grid>
+            </TabPanel>
+
             <Dialog
                 open={dialogEdit}
                 onClose={handleCloseEdit}
@@ -161,12 +235,32 @@ function Menu(props) {
                         value={curMenu.image}
                         fullWidth
                     />
+                    <TextField
+                        id="standard-select-currency"
+                        select
+                        label="Select"
+                        fullWidth
+                        value={curMenu.isCoffee}
+                        onChange={handleChangeEdit('isCoffee')}
+                        SelectProps={{
+                            MenuProps: {
+                                className: classes.menu,
+                            },
+                        }}
+                        margin="normal"
+                    >
+                        {type.map(option => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                     <input
                         accept="image/*"
                         type="file"
                         onChange={(e) => handleChangeUpload(e)}
                     />
-                    {(uploadValue > 0 && uploadValue <100) && (<span>{uploadValue}%</span> )} {uploadValue === 100 && (<span>{messag}</span>)}
+                    {(uploadValue > 0 && uploadValue < 100) && (<span>{uploadValue}%</span>)} {uploadValue === 100 && (<span>{messag}</span>)}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseEdit} color="primary">
@@ -179,7 +273,7 @@ function Menu(props) {
                         Edit
                     </Button>
                 </DialogActions>
-                
+
             </Dialog>
             <Dialog
                 open={dialogAdd}
@@ -192,7 +286,7 @@ function Menu(props) {
                         autoFocus
                         label="Manu Name"
                         type="text"
-                        value = {newMenu.name}
+                        value={newMenu.name}
                         onChange={handleChangeAdd('name')}
                         fullWidth
                     />
@@ -202,27 +296,47 @@ function Menu(props) {
                         id="menuPrice"
                         label="Manu Price"
                         type="number"
-                        value = {newMenu.price}
+                        value={newMenu.price}
                         onChange={handleChangeAdd('price')}
                         fullWidth
                     />
-                     <TextField
+                    <TextField
                         name="newMenu"
                         autoFocus
                         margin="dense"
                         id="menuImage"
                         label="Manu Image"
                         type="text"
-                        value = {newMenu.image}
+                        value={newMenu.image}
                         onChange={handleChangeAdd('image')}
                         fullWidth
-                    /> 
+                    />
+                    <TextField
+                        id="standard-select-currency"
+                        select
+                        label="Select"
+                        fullWidth
+                        value={newMenu.isCoffee}
+                        onChange={handleChangeAdd('isCoffee')}
+                        SelectProps={{
+                            MenuProps: {
+                                className: classes.menu,
+                            },
+                        }}
+                        margin="normal"
+                    >
+                        {type.map(option => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                     <input
                         accept="image/*"
                         type="file"
                         onChange={(e) => handleChangeUpload(e)}
                     />
-                    {(uploadValue > 0 && uploadValue <100) && (<span>{uploadValue}%</span> )} {uploadValue === 100 && (<span>{messag}</span>)}
+                    {(uploadValue > 0 && uploadValue < 100) && (<span>{uploadValue}%</span>)} {uploadValue === 100 && (<span>{messag}</span>)}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseAdd} color="primary">

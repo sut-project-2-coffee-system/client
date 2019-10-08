@@ -42,7 +42,18 @@ const SignIn = (props) => {
         props.history.push('/')
       }
       else {
-        alert('Please check your email to verify email')
+        //alert('Please check your email to verify email')
+        // eslint-disable-next-line no-restricted-globals
+        let x = confirm("คุณยังไม่ได้ยืนยันอีเมล์ คุณต้องการให้ส่งยืนยันอีกรอบหรือไม่?");
+        if(x){
+          let cur_user = firebase.auth().currentUser;
+          cur_user.sendEmailVerification().then(function() {
+            alert('ส่งอีเมล์ยืนยันไปที่ ' + user.user.email + " เรียบร้อยแล้ว")
+          }).catch(function(error) {
+            console.log(error);
+            
+          });
+        }
       }
     }).catch((error) => {
       alert(error.message)
